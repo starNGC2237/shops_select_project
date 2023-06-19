@@ -1,7 +1,8 @@
 <script setup lang="ts"></script>
+
 <template>
   <div>
-    <router-view></router-view>
+    <h1>我是404</h1>
   </div>
 </template>
 
