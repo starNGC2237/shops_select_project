@@ -9,6 +9,7 @@ import "virtual:svg-icons-register";
 import globalComponent from "@/components/index.ts";
 import "./styles/reset.scss";
 import router from "./router";
+import store from "./store";
 
 const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
@@ -17,4 +18,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(globalComponent);
 app.use(ElementPlus, { locale: zhCn });
 app.use(router);
+app.use(store);
 app.mount("#app");
