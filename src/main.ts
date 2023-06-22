@@ -7,7 +7,7 @@ import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import "virtual:svg-icons-register";
 // 自定义插件
 import globalComponent from "@/components/index.ts";
-import "./styles/reset.scss";
+import "./styles/index.scss";
 import router from "./router";
 import store from "./store";
 

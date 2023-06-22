@@ -16,22 +16,49 @@ let loginForm = reactive({
 let loading = ref(false);
 const loginFormRules = {
   username: [
-    {
+    /**
+     * {
       required: true,
       min: 3,
       max: 10,
       message: "长度在 3 到 10 个字符",
       trigger: "change",
     },
+     */
+    {
+      trigger: "change",
+      validator: (rule: any, value: any, callback: any) => {
+        console.log(rule, value, callback);
+        console.log(/^\w{3,10}$/.test(value));
+        if (/^\w{3,10}$/.test(value)) {
+          callback();
+        } else {
+          callback(new Error("长度在 3 到 10 个字符"));
+        }
+      },
+    },
   ],
   password: [
     {
+      trigger: "change",
+      validator: (rule: any, value: any, callback: any) => {
+        console.log(rule, value, callback);
+        if (/^\w{6,10}$/.test(value)) {
+          callback();
+        } else {
+          callback(new Error("长度在 6 到 15 个字符"));
+        }
+      },
+    },
+    /**
+     * {
       required: true,
       min: 6,
       max: 15,
       message: "长度在 6 到 15 个字符",
       trigger: "change",
     },
+     */
   ],
 };
 
