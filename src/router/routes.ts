@@ -15,7 +15,7 @@ export const constantRoutes = [
     name: "layout",
     redirect: "/home",
     meta: {
-      title: "layout",
+      title: "",
       hidden: false,
       icon: "Avatar",
     },

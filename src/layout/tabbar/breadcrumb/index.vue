@@ -3,15 +3,18 @@
     <component :is="settingStore.fold ? 'Fold' : 'Expand'" />
   </el-icon>
   <el-breadcrumb separator-icon="ArrowRight">
-    <el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
-      <template #default>
-        <div style="display: flex; align-items: center">
-          <el-icon style="margin: auto 5px">
-            <component :is="item.meta.icon"></component>
-          </el-icon>
-          <span>{{ item.meta.title }}</span>
-        </div>
-      </template>
+    <el-breadcrumb-item
+      v-for="item in $route.matched"
+      :key="item.path"
+      :to="item.path"
+      v-show="item.meta.title"
+    >
+      <div style="display: flex; align-items: center">
+        <el-icon style="margin: 0 5px">
+          <component :is="item.meta.icon"></component>
+        </el-icon>
+        <span>{{ item.meta.title }}</span>
+      </div>
     </el-breadcrumb-item>
   </el-breadcrumb>
 </template>
