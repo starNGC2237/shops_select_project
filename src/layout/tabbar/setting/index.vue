@@ -4,17 +4,20 @@
   <el-button circle size="small" icon="FullScreen" @click="fullScreen">
   </el-button>
   <el-button circle size="small" icon="Setting"> </el-button>
-  <img src="/opal.png" style="width: 20px; height: 20px; margin: 0 10px" />
+  <img
+    :src="userStore.avatar"
+    style="width: 20px; height: 20px; margin: 0 10px"
+  />
   <el-dropdown>
     <span class="el-dropdown-link">
-      用户名
+      {{ userStore.username }}
       <el-icon class="el-icon--right">
         <arrow-down />
       </el-icon>
     </span>
     <template #dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item>退出登录</el-dropdown-item>
+        <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
       </el-dropdown-menu>
     </template>
   </el-dropdown>
@@ -22,7 +25,13 @@
 
 <script setup lang="ts">
 import useLayoutSettingStore from "@/store/modules/setting";
+import useUserStore from "@/store/modules/user";
+import { useRouter, useRoute } from "vue-router";
 let settingStore = useLayoutSettingStore();
+let userStore = useUserStore();
+let $router = useRouter();
+let $route = useRoute();
+
 const updateRefresh = () => {
   settingStore.refresh = !settingStore.refresh;
 };
@@ -33,6 +42,10 @@ const fullScreen = () => {
   } else {
     document.exitFullscreen();
   }
+};
+const logout = () => {
+  userStore.userLogout();
+  $router.push({ path: "/login", query: { redirect: $route.fullPath } });
 };
 </script>
 <script lang="ts">

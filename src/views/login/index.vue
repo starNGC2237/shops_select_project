@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { Lock, User } from "@element-plus/icons-vue";
 import { reactive, ref } from "vue";
 import useUserStore from "@/store/modules/user";
@@ -8,6 +8,7 @@ import { getMoment } from "@/utils/time";
 
 let userStore = useUserStore();
 let $router = useRouter();
+let $route = useRoute();
 let loginFormRef = ref();
 let loginForm = reactive({
   username: "admin",
@@ -27,9 +28,7 @@ const loginFormRules = {
      */
     {
       trigger: "change",
-      validator: (rule: any, value: any, callback: any) => {
-        console.log(rule, value, callback);
-        console.log(/^\w{3,10}$/.test(value));
+      validator: (_: any, value: any, callback: any) => {
         if (/^\w{3,10}$/.test(value)) {
           callback();
         } else {
@@ -41,8 +40,7 @@ const loginFormRules = {
   password: [
     {
       trigger: "change",
-      validator: (rule: any, value: any, callback: any) => {
-        console.log(rule, value, callback);
+      validator: (_: any, value: any, callback: any) => {
         if (/^\w{6,10}$/.test(value)) {
           callback();
         } else {
@@ -67,7 +65,8 @@ const login = async () => {
   loading.value = true;
   try {
     await userStore.userLogin(loginForm);
-    $router.push("/");
+    let redirect: any = $route.query.redirect;
+    $router.push({ path: redirect || "/" });
     ElNotification({
       message: "登录成功",
       type: "success",
