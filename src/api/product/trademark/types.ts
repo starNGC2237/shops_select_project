@@ -4,7 +4,7 @@ export interface ResponseData {
   ok: boolean;
 }
 export interface Trademark {
-  id: number;
+  id?: number;
   logoUrl: string;
   tmName: string;
 }
