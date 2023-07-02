@@ -1,7 +1,11 @@
 import { defineStore } from "pinia";
-import { reqLogin, reqUserInfo } from "@/api/user";
-import type { loginForm, loginResponseData } from "@/api/user/type";
+import { reqLogin, reqUserInfo, reqLogout } from "@/api/user";
 import type { UserState } from "@/store/modules/types/types.ts";
+import type {
+  loginFormData,
+  LoginResponseData,
+  UserInfoResponseData,
+} from "@/api/user/type";
 import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from "@/utils/token";
 import { constantRoutes } from "@/router/routes";
 
@@ -15,33 +19,37 @@ const useUserStore = defineStore("User", {
     };
   },
   actions: {
-    async userLogin(data: loginForm) {
-      const result: loginResponseData = await reqLogin(data);
+    async userLogin(data: loginFormData) {
+      const result: LoginResponseData = await reqLogin(data);
       if (result.code === 200) {
-        this.token = result.data.token as string;
-        SET_TOKEN(result.data.token as string);
+        this.token = result.data as string;
+        SET_TOKEN(result.data as string);
         return "ok";
       } else {
-        return Promise.reject(new Error(result.data.message));
+        return Promise.reject(new Error(result.data));
       }
     },
     // 获取用户信息
     async getUserInfo() {
-      const result: any = await reqUserInfo();
+      const result: UserInfoResponseData = await reqUserInfo();
       if (result.code === 200) {
-        this.username = result.data.checkUser.username;
-        this.avatar = result.data.checkUser.avatar;
+        this.username = result.data.name;
+        this.avatar = result.data.avatar;
         return "ok";
       } else {
-        return Promise.reject(new Error(result.data.message));
+        return Promise.reject(new Error(result.message));
       }
     },
     // 退出登录
     async userLogout() {
-      this.token = "";
-      this.username = "";
-      this.avatar = "";
-      REMOVE_TOKEN();
+      const result: any = await reqLogout();
+      if (result.code === 200) {
+        this.token = "";
+        this.username = "";
+        this.avatar = "";
+        REMOVE_TOKEN();
+        return "ok";
+      }
     },
   },
   getters: {},

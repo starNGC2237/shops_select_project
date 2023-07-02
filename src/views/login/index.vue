@@ -12,7 +12,7 @@ let $route = useRoute();
 let loginFormRef = ref();
 let loginForm = reactive({
   username: "admin",
-  password: "111111",
+  password: "atguigu123",
 });
 let loading = ref(false);
 const loginFormRules = {
@@ -41,7 +41,7 @@ const loginFormRules = {
     {
       trigger: "change",
       validator: (_: any, value: any, callback: any) => {
-        if (/^\w{6,10}$/.test(value)) {
+        if (/^\w{6,15}$/.test(value)) {
           callback();
         } else {
           callback(new Error("长度在 6 到 15 个字符"));

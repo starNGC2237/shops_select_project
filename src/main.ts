@@ -10,6 +10,7 @@ import globalComponent from "@/components/index.ts";
 import "./styles/index.scss";
 import router from "./router";
 import store from "./store";
+import "./styles/nprogress.css";
 
 const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
@@ -19,4 +20,5 @@ app.use(globalComponent);
 app.use(ElementPlus, { locale: zhCn });
 app.use(router);
 app.use(store);
+import "./permission";
 app.mount("#app");
