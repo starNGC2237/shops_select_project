@@ -20,3 +20,20 @@ export interface CategoryState {
   c3Arr: CategoryObj[];
   c3Id: number | string;
 }
+export interface AttrValue {
+  id: number;
+  valueName: string;
+  attrId: number;
+}
+export type AttrValueList = AttrValue[];
+export interface Attr {
+  id: number;
+  attrName: string;
+  categoryId: number;
+  categoryLevel: number;
+  attrValueList: AttrValueList;
+}
+export type AttrList = Attr[];
+export interface AttrResponseData extends ResponseData {
+  data: AttrList;
+}
