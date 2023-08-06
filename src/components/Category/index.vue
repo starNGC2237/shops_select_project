@@ -2,7 +2,11 @@
   <el-card>
     <el-form inline>
       <el-form-item label="一级分类">
-        <el-select v-model="categoryStore.c1Id" @change="handleChangeC1">
+        <el-select
+          v-model="categoryStore.c1Id"
+          @change="handleChangeC1"
+          :disabled="scene === 1"
+        >
           <el-option
             v-for="item in categoryStore.c1Arr"
             :key="item.id"
@@ -13,7 +17,11 @@
         </el-select>
       </el-form-item>
       <el-form-item label="二级分类">
-        <el-select v-model="categoryStore.c2Id" @change="handleChangeC2">
+        <el-select
+          v-model="categoryStore.c2Id"
+          @change="handleChangeC2"
+          :disabled="scene === 1"
+        >
           <el-option
             v-for="item in categoryStore.c2Arr"
             :key="item.id"
@@ -24,7 +32,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="三级分类">
-        <el-select v-model="categoryStore.c3Id">
+        <el-select v-model="categoryStore.c3Id" :disabled="scene === 1">
           <el-option
             v-for="item in categoryStore.c3Arr"
             :key="item.id"
@@ -60,6 +68,12 @@ const handleChangeC2 = () => {
   categoryStore.c3Arr = [];
   categoryStore.getC3();
 };
+defineProps({
+  scene: {
+    type: Number,
+    default: 0,
+  },
+});
 </script>
 
 <style scoped></style>
