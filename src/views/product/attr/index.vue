@@ -34,15 +34,20 @@
             </template>
           </el-table-column>
           <el-table-column label="操作" width="120px">
-            <template #default>
+            <template #default="{ row }">
               <el-button
                 type="warning"
                 size="small"
                 icon="Edit"
-                @click="updateAttr"
+                @click="updateAttr(row)"
               >
               </el-button>
-              <el-button type="danger" size="small" icon="Delete"></el-button>
+              <el-popconfirm title="确定删除吗？" @confirm="deleteAttr(row.id)">
+                <template #reference>
+                  <el-button type="danger" size="small" icon="Delete">
+                  </el-button>
+                </template>
+              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
@@ -101,7 +106,8 @@
                 size="small"
                 icon="Delete"
                 @click="() => attrParams.attrValueList.splice($index, 1)"
-              ></el-button>
+              >
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -118,11 +124,11 @@
 </template>
 
 <script setup lang="ts">
-import { reqAttr, reqAddUpdate } from "@/api/product/attr";
+import { reqAttr, reqAddUpdate, reqDelete } from "@/api/product/attr";
 import { AttrResponseData, Attr } from "@/api/product/attr/types";
 import useCategory from "@/store/modules/category";
 import { ElMessage } from "element-plus";
-import { ref, watch, reactive, nextTick } from "vue";
+import { ref, watch, reactive, nextTick, onBeforeUnmount } from "vue";
 let categoryStore = useCategory();
 let attrArr = ref<Attr[]>([]);
 let scene = ref<number>(0);
@@ -157,8 +163,9 @@ const addAttr = () => {
   });
   scene.value = 1;
 };
-const updateAttr = () => {
+const updateAttr = (row: Attr) => {
   scene.value = 1;
+  Object.assign(attrParams, JSON.parse(JSON.stringify(row)));
 };
 const cancel = () => {
   scene.value = 0;
@@ -206,6 +213,19 @@ const toEdit = (row: any, $index: number) => {
     inputArr.value[$index].focus();
   });
 };
+const deleteAttr = (attrId: string | number) => {
+  reqDelete(attrId).then((res) => {
+    if (res.code === 200) {
+      ElMessage.success("删除成功");
+      getAttr();
+    } else {
+      ElMessage.error("删除失败");
+    }
+  });
+};
+onBeforeUnmount(() => {
+  categoryStore.$reset();
+});
 </script>
 
 <style scoped></style>
