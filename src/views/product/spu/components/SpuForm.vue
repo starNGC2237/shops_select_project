@@ -39,15 +39,54 @@
     </el-form-item>
     <el-form-item>
       <el-button type="primary"> 保存 </el-button>
-      <el-button type="primary" @click="() => emits('changeScene', 0)">
-        取消
-      </el-button>
+      <el-button type="primary" @click="cancel"> 取消 </el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script setup lang="ts">
+import type {
+  SpuData,
+  AllTrademarkResponseData,
+  SpuHasImg,
+  SaleAttrResponseData,
+  HasSaleAttrResponseData,
+  Trademark,
+  SpuImg,
+  SaleAttr,
+  HasSaleAttr,
+} from "@/api/product/spu/types";
+import {
+  reqAllTrademark,
+  reqSpuImageList,
+  reqSpuHasSaleAttr,
+  reqAllSaleAttr,
+} from "@/api/product/spu";
+import { ref } from "vue";
+let AllTrademark = ref<Trademark[]>([]);
+let imgList = ref<SpuImg[]>([]);
+let saleAttrList = ref<SaleAttr[]>([]);
+let allSaleAttr = ref<HasSaleAttr[]>([]);
+let dialogVisible = ref(false);
+
 const emits = defineEmits(["changeScene"]);
+const cancel = () => {
+  emits("changeScene", 0);
+};
+const initHasSpuData = async (spu: SpuData) => {
+  let res: AllTrademarkResponseData = await reqAllTrademark();
+  let res1: SpuHasImg = await reqSpuImageList(spu.id as number);
+  let res2: SaleAttrResponseData = await reqSpuHasSaleAttr(spu.id as number);
+  let res3: HasSaleAttrResponseData = await reqAllSaleAttr();
+
+  AllTrademark.value = res.data;
+  imgList.value = res1.data;
+  saleAttrList.value = res2.data;
+  allSaleAttr.value = res3.data;
+};
+defineExpose({
+  initHasSpuData,
+});
 </script>
 
 <style scoped></style>

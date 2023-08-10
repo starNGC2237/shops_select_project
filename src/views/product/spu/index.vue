@@ -27,7 +27,7 @@
           >
           </el-table-column>
           <el-table-column label="SPU操作">
-            <template #default>
+            <template #default="{ row }">
               <el-button
                 type="primary"
                 size="small"
@@ -40,7 +40,7 @@
                 size="small"
                 icon="Edit"
                 title="修改SPU"
-                @click="updateSpu"
+                @click="updateSpu(row)"
               >
               </el-button>
               <el-button
@@ -71,13 +71,18 @@
           @size-change="changeSize"
         />
       </div>
-      <SpuForm v-show="scene === 1" @changeScene="changeScene" />
+      <SpuForm
+        ref="SpuFormRef"
+        v-show="scene === 1"
+        @changeScene="changeScene"
+      />
       <SkuForm v-show="scene === 2" />
     </el-card>
   </div>
 </template>
 
 <script setup lang="ts">
+import type { SpuData } from "@/api/product/spu/types.ts";
 import { ref, watch } from "vue";
 import useCategoryStore from "@/store/modules/category";
 import { reqHasSpu } from "@/api/product/spu";
@@ -90,6 +95,7 @@ let pageNo = ref<number>(1);
 let pageSize = ref<number>(3);
 let records = ref<Records>([]);
 let total = ref<number>(0);
+let SpuFormRef = ref<any>(null);
 
 watch(
   () => categoryStore.c3Id,
@@ -115,8 +121,9 @@ const changeSize = () => {
 const addSpu = () => {
   scene.value = 1;
 };
-const updateSpu = () => {
+const updateSpu = (row: SpuData) => {
   scene.value = 1;
+  SpuFormRef.value.initHasSpuData(row);
 };
 const changeScene = (sceneNumber: number) => {
   scene.value = sceneNumber;
