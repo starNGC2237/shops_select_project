@@ -1,14 +1,20 @@
 @import "./reset.scss";
 
-// 滚动条外观设置
-::-webkit-scrollbar {
-    width: 10px;
-}
-::-webkit-scrollbar-track {
-    background: $base-menu-background;
-}
-::-webkit-scrollbar-thumb {
-    width: 10px;
-    background: yellowgreen;
-    border-radius: 10px;
-}
+// common.less
+*::-webkit-scrollbar{
+    width: 8px;
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    background: #ccc; // 滑块颜色
+    border-radius: 4px; // 滑块圆角
+  }
+  
+  // 兼容Firefox、IE
+  * {
+    scrollbar-width: 8px;
+    scrollbar-base-color: green;
+    scrollbar-track-color: red;
+    scrollbar-arrow-color: blue;
+  }
+  
