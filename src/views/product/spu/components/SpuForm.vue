@@ -1,13 +1,26 @@
 <template>
   <el-form :label-width="'100px'">
     <el-form-item label="SPU名称">
-      <el-input placeholder="请输入名称"></el-input>
+      <el-input placeholder="请输入名称" v-model="SPuParams.spuName"></el-input>
     </el-form-item>
     <el-form-item label="SPU品牌">
-      <el-select placeholder="请选择品牌"> </el-select>
+      <el-select placeholder="请选择品牌" v-model="SPuParams.tmId">
+        <el-option
+          v-for="item in AllTrademark"
+          :key="item.id"
+          :label="item.tmName"
+          :value="item.id"
+        >
+        </el-option>
+      </el-select>
     </el-form-item>
     <el-form-item label="SPU描述">
-      <el-input type="textarea" placeholder="请输入描述"></el-input>
+      <el-input
+        type="textarea"
+        placeholder="请输入描述"
+        v-model="SPuParams.description"
+      >
+      </el-input>
     </el-form-item>
     <el-form-item label="SPU图标">
       <el-upload
@@ -68,12 +81,21 @@ let imgList = ref<SpuImg[]>([]);
 let saleAttrList = ref<SaleAttr[]>([]);
 let allSaleAttr = ref<HasSaleAttr[]>([]);
 let dialogVisible = ref(false);
+let SPuParams = ref<SpuData>({
+  category3Id: "",
+  description: "",
+  spuImageList: [],
+  spuName: "",
+  spuSaleAttrList: [],
+  tmId: "",
+});
 
 const emits = defineEmits(["changeScene"]);
 const cancel = () => {
   emits("changeScene", 0);
 };
 const initHasSpuData = async (spu: SpuData) => {
+  SPuParams.value = spu;
   let res: AllTrademarkResponseData = await reqAllTrademark();
   let res1: SpuHasImg = await reqSpuImageList(spu.id as number);
   let res2: SaleAttrResponseData = await reqSpuHasSaleAttr(spu.id as number);
