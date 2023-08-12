@@ -34,11 +34,13 @@ export interface AllTrademarkResponseData extends ResponseData {
 }
 export interface SpuImg {
   id?: number;
-  createTime: string;
-  updateTime: string;
+  createTime?: string;
+  updateTime?: string;
   spuId?: number;
-  imgName: string;
-  imgUrl: string;
+  imgName?: string;
+  imgUrl?: string;
+  url?: string;
+  name?: string;
 }
 
 export interface SpuHasImg extends ResponseData {

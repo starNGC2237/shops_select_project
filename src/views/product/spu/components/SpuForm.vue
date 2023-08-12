@@ -24,17 +24,28 @@
     </el-form-item>
     <el-form-item label="SPU图标">
       <el-upload
-        v-model:file-list="fileList"
-        action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+        v-model:file-list="imgList"
+        action="/api/admin/product/fileUpload"
         list-type="picture-card"
-        :on-preview="handlePictureCardPreview"
+        :on-preview="
+          (file:any) => {
+            dialogVisible = true;
+            dialogImageUrl = file.url;
+          }
+        "
         :on-remove="handleRemove"
+        :before-upload="handleUpload"
       >
         <el-icon><Plus /></el-icon>
       </el-upload>
 
       <el-dialog v-model="dialogVisible">
-        <img w-full :src="dialogImageUrl" alt="Preview Image" />
+        <img
+          w-full
+          :src="dialogImageUrl"
+          alt="Preview Image"
+          style="width: 100%; height: 100%"
+        />
       </el-dialog>
     </el-form-item>
     <el-form-item label="SPU销售属性">
@@ -42,12 +53,34 @@
       <el-button style="margin-left: 10px" type="primary" icon="Plus">
         添加属性值
       </el-button>
-      <el-table border style="margin: 10px 0">
+      <el-table border style="margin: 10px 0" :data="saleAttrList">
         <el-table-column label="序号" type="index" align="center" width="80px">
         </el-table-column>
-        <el-table-column label="销售属性名" width="120px"> </el-table-column>
-        <el-table-column label="销售属性值"> </el-table-column>
-        <el-table-column label="操作" width="120px"> </el-table-column>
+        <el-table-column label="销售属性名" width="120px" prop="saleAttrName">
+        </el-table-column>
+        <el-table-column label="销售属性值">
+          <template #default="{ row }">
+            <el-tag
+              v-for="item in row.spuSaleAttrValueList"
+              :key="item.id"
+              closable
+              style="margin: 0 5px"
+            >
+              {{ item.saleAttrValueName }}
+            </el-tag>
+            <el-button type="primary" size="small" icon="Plus"></el-button>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="120px">
+          <template #default="{ $index }">
+            <el-button
+              type="danger"
+              size="small"
+              icon="Delete"
+              @click="() => saleAttrList.splice($index, 1)"
+            ></el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </el-form-item>
     <el-form-item>
@@ -65,7 +98,6 @@ import type {
   SaleAttrResponseData,
   HasSaleAttrResponseData,
   Trademark,
-  SpuImg,
   SaleAttr,
   HasSaleAttr,
 } from "@/api/product/spu/types";
@@ -76,11 +108,13 @@ import {
   reqAllSaleAttr,
 } from "@/api/product/spu";
 import { ref } from "vue";
+import { ElMessage } from "element-plus";
 let AllTrademark = ref<Trademark[]>([]);
-let imgList = ref<SpuImg[]>([]);
+let imgList = ref<any[]>([]);
 let saleAttrList = ref<SaleAttr[]>([]);
 let allSaleAttr = ref<HasSaleAttr[]>([]);
 let dialogVisible = ref(false);
+let dialogImageUrl = ref<string>("");
 let SPuParams = ref<SpuData>({
   category3Id: "",
   description: "",
@@ -102,9 +136,34 @@ const initHasSpuData = async (spu: SpuData) => {
   let res3: HasSaleAttrResponseData = await reqAllSaleAttr();
 
   AllTrademark.value = res.data;
-  imgList.value = res1.data;
+  imgList.value = res1.data.map((item) => {
+    return {
+      name: item.imgName,
+      url: item.imgUrl,
+    };
+  });
   saleAttrList.value = res2.data;
   allSaleAttr.value = res3.data;
+};
+const handleRemove = (file: any, fileList: any) => {
+  console.log(file, fileList);
+};
+const handleUpload = (file: any) => {
+  if (
+    file.type == "image/jpeg" ||
+    file.type === "image/png" ||
+    file.type === "image/gif"
+  ) {
+    if (file.size / 1024 / 1024 < 3) {
+      return true;
+    } else {
+      ElMessage.error("图片大小不能超过3M");
+      return false;
+    }
+  } else {
+    ElMessage.error("图片类型应该是jpg,png,gif之一");
+    return false;
+  }
 };
 defineExpose({
   initHasSpuData,
