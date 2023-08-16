@@ -62,7 +62,7 @@ export interface SaleAttr {
   createTime?: string;
   updateTime?: string;
   spuId?: number;
-  baseSaleAttrId: number;
+  baseSaleAttrId: number | string;
   saleAttrName: string;
   spuSaleAttrValueList: spuSaleAttrValueList;
 }

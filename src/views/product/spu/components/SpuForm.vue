@@ -49,9 +49,30 @@
       </el-dialog>
     </el-form-item>
     <el-form-item label="SPU销售属性">
-      <el-select></el-select>
-      <el-button style="margin-left: 10px" type="primary" icon="Plus">
-        添加属性值
+      <el-select
+        v-model="saleAttrIdAndValueName"
+        :placeholder="
+          unSelectSaleAttr.length
+            ? `还未选择${unSelectSaleAttr.length}个`
+            : '无'
+        "
+      >
+        <el-option
+          v-for="item in unSelectSaleAttr"
+          :key="item.id"
+          :label="item.name"
+          :value="`${item.id}:${item.name}`"
+        >
+        </el-option>
+      </el-select>
+      <el-button
+        style="margin-left: 10px"
+        type="primary"
+        icon="Plus"
+        :disabled="!saleAttrIdAndValueName"
+        @click="addSaleAttr"
+      >
+        添加属性
       </el-button>
       <el-table border style="margin: 10px 0" :data="saleAttrList">
         <el-table-column label="序号" type="index" align="center" width="80px">
@@ -78,7 +99,8 @@
               size="small"
               icon="Delete"
               @click="() => saleAttrList.splice($index, 1)"
-            ></el-button>
+            >
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -107,7 +129,7 @@ import {
   reqSpuHasSaleAttr,
   reqAllSaleAttr,
 } from "@/api/product/spu";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { ElMessage } from "element-plus";
 let AllTrademark = ref<Trademark[]>([]);
 let imgList = ref<any[]>([]);
@@ -123,6 +145,15 @@ let SPuParams = ref<SpuData>({
   spuSaleAttrList: [],
   tmId: "",
 });
+let unSelectSaleAttr = computed(() => {
+  let unSelectArr = allSaleAttr.value.filter((item) => {
+    return saleAttrList.value.every((item1) => {
+      return item.name !== item1.saleAttrName;
+    });
+  });
+  return unSelectArr;
+});
+let saleAttrIdAndValueName = ref<string>("");
 
 const emits = defineEmits(["changeScene"]);
 const cancel = () => {
@@ -164,6 +195,16 @@ const handleUpload = (file: any) => {
     ElMessage.error("图片类型应该是jpg,png,gif之一");
     return false;
   }
+};
+const addSaleAttr = () => {
+  let [baseSaleAttrId, saleAttrName] = saleAttrIdAndValueName.value.split(":");
+  let newSaleAttr: SaleAttr = {
+    baseSaleAttrId: baseSaleAttrId,
+    saleAttrName: saleAttrName,
+    spuSaleAttrValueList: [],
+  };
+  saleAttrList.value.push(newSaleAttr);
+  saleAttrIdAndValueName.value = "";
 };
 defineExpose({
   initHasSpuData,
