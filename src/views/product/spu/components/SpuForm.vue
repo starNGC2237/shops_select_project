@@ -80,16 +80,33 @@
         <el-table-column label="销售属性名" width="120px" prop="saleAttrName">
         </el-table-column>
         <el-table-column label="销售属性值">
-          <template #default="{ row }">
+          <template #default="{ row, $index }">
             <el-tag
               v-for="item in row.spuSaleAttrValueList"
               :key="item.id"
               closable
               style="margin: 0 5px"
+              @close="() => row.spuSaleAttrValueList.splice($index, 1)"
             >
               {{ item.saleAttrValueName }}
             </el-tag>
-            <el-button type="primary" size="small" icon="Plus"></el-button>
+            <el-input
+              placeholder="请输入属性值"
+              size="small"
+              style="width: 100px"
+              v-if="row.flag == true"
+              v-model="row.saleAttrValue"
+              @blur="toLook(row)"
+            >
+            </el-input>
+            <el-button
+              type="primary"
+              size="small"
+              icon="Plus"
+              @click="toEdit(row)"
+              v-else
+            >
+            </el-button>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="120px">
@@ -106,7 +123,7 @@
       </el-table>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary"> 保存 </el-button>
+      <el-button type="primary" @click="save"> 保存 </el-button>
       <el-button type="primary" @click="cancel"> 取消 </el-button>
     </el-form-item>
   </el-form>
@@ -131,6 +148,7 @@ import {
 } from "@/api/product/spu";
 import { computed, ref } from "vue";
 import { ElMessage } from "element-plus";
+import { SaleAttrValue } from "@/api/product/spu/types";
 let AllTrademark = ref<Trademark[]>([]);
 let imgList = ref<any[]>([]);
 let saleAttrList = ref<SaleAttr[]>([]);
@@ -205,6 +223,34 @@ const addSaleAttr = () => {
   };
   saleAttrList.value.push(newSaleAttr);
   saleAttrIdAndValueName.value = "";
+};
+const toEdit = (row: SaleAttr) => {
+  row.flag = true;
+  row.saleAttrValue = "";
+};
+const toLook = (row: SaleAttr) => {
+  const { saleAttrValue = "", baseSaleAttrId } = row;
+  let newSaleAttrValue: SaleAttrValue = {
+    baseSaleAttrId,
+    saleAttrValueName: saleAttrValue as string,
+  };
+  if (saleAttrValue.trim() === "") {
+    ElMessage.error("属性值不能为空");
+    return;
+  }
+  if (
+    row.spuSaleAttrValueList.some(
+      (item) => item.saleAttrValueName === saleAttrValue
+    )
+  ) {
+    ElMessage.error("属性值不能重复");
+    return;
+  }
+  row.spuSaleAttrValueList.push(newSaleAttrValue);
+  row.flag = false;
+};
+const save = () => {
+  console.log("save");
 };
 defineExpose({
   initHasSpuData,
