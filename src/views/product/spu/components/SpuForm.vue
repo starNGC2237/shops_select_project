@@ -123,7 +123,13 @@
       </el-table>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="save"> 保存 </el-button>
+      <el-button
+        type="primary"
+        @click="save"
+        :disabled="saleAttrList.length <= 0"
+      >
+        保存
+      </el-button>
       <el-button type="primary" @click="cancel"> 取消 </el-button>
     </el-form-item>
   </el-form>
@@ -145,6 +151,7 @@ import {
   reqSpuImageList,
   reqSpuHasSaleAttr,
   reqAllSaleAttr,
+  reqAddOrUpdateSpu,
 } from "@/api/product/spu";
 import { computed, ref } from "vue";
 import { ElMessage } from "element-plus";
@@ -173,9 +180,9 @@ let unSelectSaleAttr = computed(() => {
 });
 let saleAttrIdAndValueName = ref<string>("");
 
-const emits = defineEmits(["changeScene"]);
+const $emits = defineEmits(["changeScene"]);
 const cancel = () => {
-  emits("changeScene", 0);
+  $emits("changeScene", { flag: 0, params: "update" });
 };
 const initHasSpuData = async (spu: SpuData) => {
   SPuParams.value = spu;
@@ -250,10 +257,48 @@ const toLook = (row: SaleAttr) => {
   row.flag = false;
 };
 const save = () => {
-  console.log("save");
+  SPuParams.value.spuImageList = imgList.value.map((item: any) => {
+    return {
+      imgUrl: (item.response && item.response.data) || item.url,
+      imgName: item.name,
+    };
+  });
+  SPuParams.value.spuSaleAttrList = saleAttrList.value;
+  reqAddOrUpdateSpu(SPuParams.value).then((res) => {
+    if (res.code === 200) {
+      ElMessage.success(SPuParams.value.id ? "更新成功" : "添加成功");
+      $emits("changeScene", {
+        flag: 0,
+        params: SPuParams.value.id ? "update" : "add",
+      });
+    } else {
+      ElMessage.error(SPuParams.value.id ? "更新失败" : "添加失败");
+    }
+  });
+};
+const initAddSpu = async (c3Id: number | string) => {
+  // 清空数据
+  Object.assign(SPuParams.value, {
+    category3Id: "",
+    description: "",
+    spuImageList: [],
+    spuName: "",
+    spuSaleAttrList: [],
+    tmId: "",
+  });
+  imgList.value = [];
+  saleAttrList.value = [];
+  saleAttrIdAndValueName.value = "";
+
+  SPuParams.value.category3Id = c3Id;
+  let result: AllTrademarkResponseData = await reqAllTrademark();
+  let result1: HasSaleAttrResponseData = await reqAllSaleAttr();
+  AllTrademark.value = result.data;
+  allSaleAttr.value = result1.data;
 };
 defineExpose({
   initHasSpuData,
+  initAddSpu,
 });
 </script>
 

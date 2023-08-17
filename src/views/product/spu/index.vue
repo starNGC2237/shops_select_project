@@ -120,13 +120,17 @@ const changeSize = () => {
 };
 const addSpu = () => {
   scene.value = 1;
+  SpuFormRef.value.initAddSpu(categoryStore.c3Id);
 };
 const updateSpu = (row: SpuData) => {
   scene.value = 1;
   SpuFormRef.value.initHasSpuData(row);
 };
-const changeScene = (sceneNumber: number) => {
-  scene.value = sceneNumber;
+const changeScene = (obj: any) => {
+  const { flag, params } = obj;
+  scene.value = flag;
+  params === "update" && getHasSpu(pageNo.value);
+  params !== "update" && getHasSpu();
 };
 </script>
 
