@@ -77,7 +77,11 @@
         v-show="scene === 1"
         @changeScene="changeScene"
       />
-      <SkuForm v-show="scene === 2" @changeScene="changeScene" />
+      <SkuForm
+        ref="SkuFormRef"
+        v-show="scene === 2"
+        @changeScene="changeScene"
+      />
     </el-card>
   </div>
 </template>
@@ -97,6 +101,7 @@ let pageSize = ref<number>(3);
 let records = ref<Records>([]);
 let total = ref<number>(0);
 let SpuFormRef = ref<any>(null);
+let SkuFormRef = ref<any>(null);
 
 watch(
   () => categoryStore.c3Id,
@@ -133,9 +138,9 @@ const changeScene = (obj: any) => {
   params === "update" && getHasSpu(pageNo.value);
   params !== "update" && getHasSpu();
 };
-const addSku = (row: any) => {
-  console.log(row);
+const addSku = (row: SpuData) => {
   scene.value = 2;
+  SkuFormRef.value.initSkuData(categoryStore.c1Id, categoryStore.c2Id, row);
 };
 </script>
 
