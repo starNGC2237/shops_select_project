@@ -33,6 +33,7 @@
                 size="small"
                 icon="Plus"
                 title="添加SKU"
+                @click="addSku(row)"
               >
               </el-button>
               <el-button
@@ -76,7 +77,7 @@
         v-show="scene === 1"
         @changeScene="changeScene"
       />
-      <SkuForm v-show="scene === 2" />
+      <SkuForm v-show="scene === 2" @changeScene="changeScene" />
     </el-card>
   </div>
 </template>
@@ -131,6 +132,10 @@ const changeScene = (obj: any) => {
   scene.value = flag;
   params === "update" && getHasSpu(pageNo.value);
   params !== "update" && getHasSpu();
+};
+const addSku = (row: any) => {
+  console.log(row);
+  scene.value = 2;
 };
 </script>
 
