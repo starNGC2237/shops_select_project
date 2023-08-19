@@ -5,6 +5,7 @@ import type {
   HasSpuResponseData,
   SaleAttrResponseData,
   SkuData,
+  SkuResponseData,
   SpuData,
   SpuHasImg,
 } from "./types.ts";
@@ -17,6 +18,7 @@ enum API {
   ADDSPU_URL = "/admin/product/saveSpuInfo",
   UPDATESPU_URL = "/admin/product/updateSpuInfo",
   ADDSKU_URL = "/admin/product/saveSkuInfo",
+  SKUINFO_URL = "/admin/product/findBySpuId/",
 }
 export const reqHasSpu = (
   page: number,
@@ -44,3 +46,5 @@ export const reqAddOrUpdateSpu = (data: SpuData) => {
 };
 export const reqAddSku = (data: SkuData) =>
   request.post<any, any>(API.ADDSKU_URL, data);
+export const reqSkuInfo = (spuId: number | string) =>
+  request.get<any, SkuResponseData>(API.SKUINFO_URL + `${spuId}`);

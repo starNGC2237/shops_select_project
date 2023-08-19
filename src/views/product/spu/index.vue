@@ -49,6 +49,7 @@
                 size="small"
                 icon="Search"
                 title="查看SKU列表"
+                @click="findSku(row)"
               >
               </el-button>
               <el-button
@@ -82,15 +83,34 @@
         v-show="scene === 2"
         @changeScene="changeScene"
       />
+      <el-dialog v-model="show" title="Sku列表">
+        <el-table border :data="skuArr">
+          <el-table-column label="SKU名字" prop="skuName"></el-table-column>
+          <el-table-column label="SKU价格" prop="price"></el-table-column>
+          <el-table-column label="SKU重量" prop="weight"></el-table-column>
+          <el-table-column label="SKU图片">
+            <template #default="{ row }">
+              <img
+                :src="row.skuDefaultImg"
+                style="width: 100px; height: 100px"
+              />
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-dialog>
     </el-card>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { SpuData } from "@/api/product/spu/types.ts";
+import type {
+  SpuData,
+  SkuResponseData,
+  SkuData,
+} from "@/api/product/spu/types.ts";
 import { ref, watch } from "vue";
 import useCategoryStore from "@/store/modules/category";
-import { reqHasSpu } from "@/api/product/spu";
+import { reqHasSpu, reqSkuInfo } from "@/api/product/spu";
 import type { HasSpuResponseData, Records } from "@/api/product/spu/types.ts";
 import SpuForm from "./components/SpuForm.vue";
 import SkuForm from "./components/SkuForm.vue";
@@ -102,6 +122,8 @@ let records = ref<Records>([]);
 let total = ref<number>(0);
 let SpuFormRef = ref<any>(null);
 let SkuFormRef = ref<any>(null);
+let skuArr = ref<SkuData[]>([]);
+let show = ref<boolean>(false);
 
 watch(
   () => categoryStore.c3Id,
@@ -141,6 +163,13 @@ const changeScene = (obj: any) => {
 const addSku = (row: SpuData) => {
   scene.value = 2;
   SkuFormRef.value.initSkuData(categoryStore.c1Id, categoryStore.c2Id, row);
+};
+const findSku = async (row: SpuData) => {
+  let res: SkuResponseData = await reqSkuInfo(row.id as number);
+  if (res.code === 200) {
+    skuArr.value = res.data;
+    show.value = true;
+  }
 };
 </script>
 

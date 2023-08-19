@@ -99,3 +99,6 @@ export interface SkuData {
   skuSaleAttrValueList: saleAttr[];
   skyDefaultImg: string;
 }
+export interface SkuResponseData extends ResponseData {
+  data: SkuData[];
+}
