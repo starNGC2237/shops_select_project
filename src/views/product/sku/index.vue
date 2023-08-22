@@ -57,7 +57,15 @@
             @click="findSpu(row)"
           >
           </el-button>
-          <el-button type="danger" size="small" icon="Delete"> </el-button>
+          <el-popconfirm
+            :title="`你确认要删除${row.skuName}吗？`"
+            width="200px"
+            @confirm="removeSku(row)"
+          >
+            <template #reference>
+              <el-button type="danger" size="small" icon="Delete"> </el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -150,9 +158,10 @@ import {
   reqSkuList,
   reqSkuSale,
   reqSkuInfo,
+  reqSkuDelete,
 } from "@/api/product/sku";
 import { SkuResponseData } from "@/api/product/sku/types";
-import { SkuData, SkuInfoResponseData } from "@/api/product/spu/types";
+import { SkuData, SkuInfoResponseData, SpuData } from "@/api/product/spu/types";
 import { ElMessage } from "element-plus";
 import { onMounted, ref } from "vue";
 
@@ -190,6 +199,15 @@ const findSpu = async (row: SkuData) => {
     info.value = res.data;
   }
   drawer.value = true;
+};
+const removeSku = async (row: SpuData) => {
+  let res = await reqSkuDelete(row.id as number);
+  if (res.code === 200) {
+    ElMessage.success("删除成功");
+    getHasSku(skuArr.value.length === 1 ? pageNo.value - 1 : pageNo.value);
+  } else {
+    ElMessage.error("系统数据不能删除");
+  }
 };
 
 onMounted(() => {
