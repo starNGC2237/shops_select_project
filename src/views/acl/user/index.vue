@@ -76,7 +76,12 @@
             >
               编辑
             </el-button>
-            <el-button type="danger" size="small" icon="Delete">
+            <el-button
+              type="danger"
+              size="small"
+              icon="Delete"
+              @click="deleteUser(row)"
+            >
               删除
             </el-button>
           </template>
@@ -133,7 +138,7 @@
 </template>
 
 <script setup lang="ts">
-import { reqAddOrUpdateUser, reqUserInfo } from "@/api/acl/user";
+import { reqAddOrUpdateUser, reqUserInfo, reqRemoveUser } from "@/api/acl/user";
 import { nextTick, onMounted, ref } from "vue";
 import type { UserResponseData, Records, User } from "@/api/acl/user/type";
 import { ElMessage } from "element-plus";
@@ -209,7 +214,7 @@ const save = async () => {
       if (res.code === 200) {
         drawer.value = false;
         ElMessage.success("成功");
-        getHasUser(userParams.value.id ? currentPage.value : 1);
+        // getHasUser(userParams.value.id ? currentPage.value : 1);
         window.location.reload();
       } else {
         drawer.value = false;
@@ -220,6 +225,16 @@ const save = async () => {
 };
 const cancel = () => {
   drawer.value = false;
+};
+// TODO: 删除用户
+const deleteUser = async (row: User) => {
+  let res = await reqRemoveUser(row.id as number);
+  if (res.code === 200) {
+    ElMessage.success("删除成功");
+    getHasUser();
+  } else {
+    ElMessage.error("删除失败");
+  }
 };
 
 onMounted(() => {
