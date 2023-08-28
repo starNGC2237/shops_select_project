@@ -3,25 +3,33 @@
     <el-card>
       <el-form inline class="form">
         <el-form-item label="用户名：">
-          <el-input placeholder="请输入用户名"></el-input>
+          <el-input placeholder="请输入用户名" v-model="keyWord"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">搜索</el-button>
-          <el-button type="primary">重置</el-button>
+          <el-button type="primary" @click="search">搜索</el-button>
+          <el-button type="primary" @click="reset">重置</el-button>
         </el-form-item>
       </el-form>
     </el-card>
     <el-card style="margin: 10px 0">
       <el-button type="primary" @click="addUser">添加用户</el-button>
-      <el-button type="primary">批量删除</el-button>
+      <el-button
+        type="primary"
+        :disabled="selectArr.length <= 0"
+        @click="deleteSelectUser"
+      >
+        批量删除
+      </el-button>
 
-      <el-table :data="userList" border style="margin: 10px 0">
+      <el-table
+        @selection-change="selectChange"
+        :data="userList"
+        border
+        style="margin: 10px 0"
+      >
         <el-table-column align="center" type="selection"></el-table-column>
-        <el-table-column
-          type="index"
-          align="center"
-          label="#"
-        ></el-table-column>
+        <el-table-column type="index" align="center" label="#">
+        </el-table-column>
         <el-table-column prop="id" align="center" label="id"></el-table-column>
         <el-table-column
           show-overflow-tooltip
@@ -81,14 +89,17 @@
             >
               编辑
             </el-button>
-            <el-button
-              type="danger"
-              size="small"
-              icon="Delete"
-              @click="deleteUser(row)"
+            <el-popconfirm
+              :title="`你确定删除${row.username}吗?`"
+              width="260px"
+              @confirm="deleteUser(row)"
             >
-              删除
-            </el-button>
+              <template #reference>
+                <el-button type="danger" size="small" icon="Delete">
+                  删除
+                </el-button>
+              </template>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -188,6 +199,7 @@ import {
   reqRemoveUser,
   reqAllRole,
   reqSetUserRole,
+  reqSelectUser,
 } from "@/api/acl/user";
 import { nextTick, onMounted, ref, toRaw } from "vue";
 import type {
@@ -198,7 +210,9 @@ import type {
   SetRoleData,
 } from "@/api/acl/user/type";
 import { ElMessage } from "element-plus";
+import useLayoutSettingStore from "@/store/modules/setting";
 
+let settingStore = useLayoutSettingStore();
 let formRef = ref<any>(null);
 let currentPage = ref<number>(0);
 let pageSize = ref<number>(5);
@@ -237,6 +251,8 @@ let checkAll = ref<boolean>(false);
 let isIndeterminate = ref<boolean>(true);
 let allRole = ref<RoleData[]>([]);
 let userRole = ref<number[]>([]);
+let selectArr = ref<number[]>([]);
+let keyWord = ref<string>("");
 
 const handleCheckAllChange = (val: any) => {
   userRole.value = val
@@ -257,7 +273,8 @@ const getHasUser = async (pager = 1) => {
   currentPage.value = pager;
   let res: UserResponseData = await reqUserInfo(
     currentPage.value,
-    pageSize.value
+    pageSize.value,
+    keyWord.value
   );
   if (res.code === 200) {
     total.value = res.data.total;
@@ -303,12 +320,17 @@ const save = async () => {
 const cancel = () => {
   drawer.value = false;
 };
-// TODO: 删除用户
 const deleteUser = async (row: User) => {
-  let res = await reqRemoveUser(row.id as number);
+  if (!row.id) {
+    ElMessage.error("删除失败");
+    return;
+  }
+  let res = await reqRemoveUser(row.id);
   if (res.code === 200) {
     ElMessage.success("删除成功");
-    getHasUser();
+    getHasUser(
+      userList.value.length > 1 ? currentPage.value : currentPage.value - 1
+    );
   } else {
     ElMessage.error("删除失败");
   }
@@ -350,6 +372,32 @@ const confirm = async () => {
   } else {
     ElMessage.error("失败");
   }
+};
+const selectChange = (val: any) => {
+  selectArr.value = val.reduce((pre: number[], item: User) => {
+    pre.push(item.id as number);
+    return pre;
+  }, []);
+};
+const deleteSelectUser = async () => {
+  let res = await reqSelectUser(selectArr.value);
+  if (res.code === 200) {
+    ElMessage.success("删除成功");
+    getHasUser(
+      userList.value.length > selectArr.value.length
+        ? currentPage.value
+        : currentPage.value - 1
+    );
+  } else {
+    ElMessage.error("删除失败");
+  }
+};
+const search = () => {
+  getHasUser();
+  keyWord.value = "";
+};
+const reset = () => {
+  settingStore.refresh = !settingStore.refresh;
 };
 
 onMounted(() => {
