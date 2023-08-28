@@ -65,7 +65,12 @@
           label="操作"
         >
           <template #default="{ row }">
-            <el-button type="primary" size="small" icon="User">
+            <el-button
+              type="primary"
+              size="small"
+              icon="User"
+              @click="setRole(row)"
+            >
               分配角色
             </el-button>
             <el-button
@@ -134,13 +139,64 @@
         </div>
       </template>
     </el-drawer>
+    <el-drawer v-model="drawerRole" width="45%">
+      <template #header>
+        <h4>分配角色（职位）</h4>
+      </template>
+      <template #default>
+        <el-form>
+          <el-form-item label="用户姓名">
+            <el-input disabled v-model="userParams.username"></el-input>
+          </el-form-item>
+          <el-form-item label="职位角色">
+            <el-checkbox
+              v-model="checkAll"
+              :indeterminate="isIndeterminate"
+              @change="handleCheckAllChange"
+            >
+              全选
+            </el-checkbox>
+            <el-checkbox-group
+              v-model="userRole"
+              @change="handleCheckedCitiesChange"
+            >
+              <el-checkbox
+                v-for="item in allRole"
+                :key="item.id"
+                :label="item.id"
+              >
+                {{ item.roleName }}
+              </el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+        </el-form>
+      </template>
+      <template #footer>
+        <div style="flex: auto">
+          <el-button @click="() => (drawerRole = false)">取消</el-button>
+          <el-button type="primary" @click="confirm">确认</el-button>
+        </div>
+      </template>
+    </el-drawer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reqAddOrUpdateUser, reqUserInfo, reqRemoveUser } from "@/api/acl/user";
-import { nextTick, onMounted, ref } from "vue";
-import type { UserResponseData, Records, User } from "@/api/acl/user/type";
+import {
+  reqAddOrUpdateUser,
+  reqUserInfo,
+  reqRemoveUser,
+  reqAllRole,
+  reqSetUserRole,
+} from "@/api/acl/user";
+import { nextTick, onMounted, ref, toRaw } from "vue";
+import type {
+  UserResponseData,
+  Records,
+  User,
+  RoleData,
+  SetRoleData,
+} from "@/api/acl/user/type";
 import { ElMessage } from "element-plus";
 
 let formRef = ref<any>(null);
@@ -149,6 +205,7 @@ let pageSize = ref<number>(5);
 let total = ref<number>(0);
 let userList = ref<Records>([]);
 let drawer = ref<boolean>(false);
+let drawerRole = ref<boolean>(false);
 let userParams = ref<User>({
   id: 0,
   username: "",
@@ -176,6 +233,26 @@ let rules = {
   password: [{ required: true, validator: validatorPassword, trigger: "blur" }],
 };
 
+let checkAll = ref<boolean>(false);
+let isIndeterminate = ref<boolean>(true);
+let allRole = ref<RoleData[]>([]);
+let userRole = ref<number[]>([]);
+
+const handleCheckAllChange = (val: any) => {
+  userRole.value = val
+    ? allRole.value.reduce((pre: number[], item) => {
+        pre.push(item.id as number);
+        return pre;
+      }, [])
+    : [];
+  isIndeterminate.value = false;
+};
+const handleCheckedCitiesChange = (val: any) => {
+  let checkedCount = val.length;
+  checkAll.value = checkedCount === allRole.value.length;
+  isIndeterminate.value =
+    checkedCount > 0 && checkedCount < allRole.value.length;
+};
 const getHasUser = async (pager = 1) => {
   currentPage.value = pager;
   let res: UserResponseData = await reqUserInfo(
@@ -234,6 +311,44 @@ const deleteUser = async (row: User) => {
     getHasUser();
   } else {
     ElMessage.error("删除失败");
+  }
+};
+const setRole = async (row: User) => {
+  Object.assign(userParams.value, row);
+  let res = await reqAllRole(userParams.value.id as number);
+  if (res.code === 200) {
+    allRole.value = res.data.allRolesList;
+    userRole.value = res.data.assignRoles.reduce((pre: any, item: any) => {
+      pre.push(item.id);
+      return pre;
+    }, []);
+
+    if (userRole.value.length === 0) {
+      checkAll.value = false;
+      isIndeterminate.value = false;
+    } else if (userRole.value.length === allRole.value.length) {
+      checkAll.value = true;
+      isIndeterminate.value = false;
+    } else {
+      checkAll.value = false;
+      isIndeterminate.value = true;
+    }
+
+    drawerRole.value = true;
+  }
+};
+const confirm = async () => {
+  let data: SetRoleData = {
+    userId: userParams.value.id || 0,
+    roleIdList: toRaw(userRole.value),
+  };
+  let res = await reqSetUserRole(data);
+  if (res.code === 200) {
+    ElMessage.success("成功");
+    drawerRole.value = false;
+    getHasUser(currentPage.value);
+  } else {
+    ElMessage.error("失败");
   }
 };
 

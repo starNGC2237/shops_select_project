@@ -24,3 +24,21 @@ export type UserResponse = {
 export interface UserResponseData extends ResponseData {
   data: UserResponse;
 }
+export interface RoleData {
+  id?: number;
+  roleName: string;
+  createTime?: string;
+  updateTime?: string;
+  remark: null;
+}
+export type RoleResData = {
+  assignRoles: RoleData[];
+  allRolesList: RoleData[];
+};
+export interface RoleResponseData extends ResponseData {
+  data: RoleResData;
+}
+export interface SetRoleData {
+  userId: number;
+  roleIdList: number[];
+}
