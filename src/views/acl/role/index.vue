@@ -61,7 +61,16 @@
             >
               编辑
             </el-button>
-            <el-button type="danger" size="small" icon="Delete">删除</el-button>
+            <el-popconfirm title="确认删除吗" width="260px">
+              <el-button
+                type="danger"
+                size="small"
+                icon="Delete"
+                @click="deleteRole(row)"
+              >
+                删除
+              </el-button>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -129,6 +138,7 @@ import {
   reqAddOrUpdateRole,
   reqAllPermissionList,
   reqAllRoleList,
+  reqRemoveRole,
   reqSetPermission,
 } from "@/api/acl/role";
 import {
@@ -146,7 +156,7 @@ let roleRef = ref<any>(null);
 let pageNo = ref<number>(1);
 let pageSize = ref<number>(3);
 let keyword = ref<string>("");
-let allRole = ref<RoleData[]>();
+let allRole = ref<RoleData[]>([]);
 let total = ref<number>(0);
 let settingStore = useLayoutSettingStore();
 let dialogVisible = ref<boolean>(false);
@@ -250,6 +260,16 @@ const handler = async () => {
     drawerVisible.value = false;
     ElMessage.success("成功");
     window.location.reload();
+  } else {
+    ElMessage.error("失败");
+  }
+};
+const deleteRole = async (row: RoleData) => {
+  if (!row.id) return;
+  let res = await reqRemoveRole(row.id);
+  if (res.code === 200) {
+    ElMessage.success("成功");
+    getHasRole(allRole.value.length === 1 ? pageNo.value - 1 : pageNo.value);
   } else {
     ElMessage.error("失败");
   }

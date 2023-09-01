@@ -6,6 +6,7 @@ enum API {
   UPDATE_ROLE_URL = "/admin/acl/role/update",
   ALLPERMISSION_URL = "/admin/acl/permission/toAssign/",
   SETPERMISSION_URL = "/admin/acl/permission/doAssign",
+  REMOVE_ROLE_URL = "/admin/acl/role/remove/",
 }
 export const reqAllRoleList = (page: number, limit: number, keywoed: string) =>
   request.get<any, RoleResponseData>(
@@ -24,3 +25,5 @@ export const reqSetPermission = (roleId: number, permissionId: number[]) =>
   request.post<any, any>(
     API.SETPERMISSION_URL + `roleId=${roleId}&permissionId=${permissionId}`
   );
+export const reqRemoveRole = (roleId: number) =>
+  request.delete<any, any>(API.REMOVE_ROLE_URL + roleId);
