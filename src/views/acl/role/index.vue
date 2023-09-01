@@ -45,7 +45,12 @@
           fixed="right"
         >
           <template #default="{ row }">
-            <el-button type="primary" size="small" icon="User">
+            <el-button
+              type="primary"
+              size="small"
+              icon="User"
+              @click="setPermission(row)"
+            >
               分配权限
             </el-button>
             <el-button
@@ -89,17 +94,54 @@
         </span>
       </template>
     </el-dialog>
+    <el-drawer width="40%" v-model="drawerVisible">
+      <template #header>
+        <h4>分配权限</h4>
+      </template>
+      <template #default>
+        <div>
+          <el-tree
+            ref="treeRef"
+            :data="menuArr"
+            show-checkbox
+            node-key="id"
+            default-expand-all
+            :default-checked-keys="selectedArr"
+            :props="{
+              children: 'children',
+              label: 'name',
+            }"
+          />
+        </div>
+      </template>
+      <template #footer>
+        <div style="flex: auto">
+          <el-button @click="drawerVisible = false">取消</el-button>
+          <el-button @click="handler">确认</el-button>
+        </div>
+      </template>
+    </el-drawer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reqAddOrUpdateRole, reqAllRoleList } from "@/api/acl/role";
-import { RoleData, RoleResponseData } from "@/api/acl/role/type";
-import { nextTick, onMounted, ref } from "vue";
+import {
+  reqAddOrUpdateRole,
+  reqAllPermissionList,
+  reqAllRoleList,
+  reqSetPermission,
+} from "@/api/acl/role";
+import {
+  MenuData,
+  MenuResponseData,
+  RoleData,
+  RoleResponseData,
+} from "@/api/acl/role/type";
+import { computed, nextTick, onMounted, ref } from "vue";
 import useLayoutSettingStore from "@/store/modules/setting";
 import { ElMessage } from "element-plus";
-import { ro } from "element-plus/es/locale";
 
+let treeRef = ref<any>(null);
 let roleRef = ref<any>(null);
 let pageNo = ref<number>(1);
 let pageSize = ref<number>(3);
@@ -108,6 +150,7 @@ let allRole = ref<RoleData[]>();
 let total = ref<number>(0);
 let settingStore = useLayoutSettingStore();
 let dialogVisible = ref<boolean>(false);
+let drawerVisible = ref<boolean>(false);
 let roleParams = ref<RoleData>({
   roleName: "",
 });
@@ -117,6 +160,7 @@ const rules = {
     { min: 2, message: "长度在 2 个字符以上", trigger: "blur" },
   ],
 };
+let menuArr = ref<MenuData[]>([]);
 
 const getHasRole = async (pager = 1) => {
   pageNo.value = pager;
@@ -166,6 +210,49 @@ const save = async () => {
       }
     }
   });
+};
+const setPermission = async (row: RoleData) => {
+  drawerVisible.value = true;
+  roleParams.value = Object.assign({}, row);
+  let res: MenuResponseData = await reqAllPermissionList(
+    roleParams.value.id as number
+  );
+  if (res.code === 200) {
+    menuArr.value = res.data;
+  }
+};
+
+const selectedArr = computed(() => {
+  const filterSelectArr = (arr: any, initArr: any) => {
+    arr.forEach((item: any) => {
+      if (item.select) {
+        initArr.push(item.id);
+      }
+      if (item.children && item.children.length > 0) {
+        filterSelectArr(item.children, initArr);
+      }
+    });
+    return initArr;
+  };
+  return filterSelectArr(menuArr.value, []);
+});
+const handler = async () => {
+  const roleId = roleParams.value.id;
+  if (!roleId) {
+    ElMessage.error("请选择职位");
+    return;
+  }
+  let arr1 = treeRef.value.getCheckedKeys();
+  let arr2 = treeRef.value.getHalfCheckedKeys();
+  let permissionIdList = [...arr1, ...arr2];
+  let res = await reqSetPermission(roleId, permissionIdList);
+  if (res.code === 200) {
+    drawerVisible.value = false;
+    ElMessage.success("成功");
+    window.location.reload();
+  } else {
+    ElMessage.error("失败");
+  }
 };
 
 onMounted(() => {

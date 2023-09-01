@@ -26,3 +26,20 @@ export interface RoleResData {
 export interface RoleResponseData extends ResponseData {
   data: RoleResData;
 }
+export interface MenuData {
+  id: number;
+  name: string;
+  createTime: string;
+  updateTime: string;
+  pid: number;
+  code: string;
+  toCode: string;
+  type: number;
+  status: number;
+  level: number;
+  children?: MenuData[];
+  select: boolean;
+}
+export interface MenuResponseData extends ResponseData {
+  data: MenuData[];
+}
