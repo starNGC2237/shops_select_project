@@ -10,7 +10,9 @@
           v-model="selectedColor"
           show-alpha
           :predefine="predefineColors"
-        ></el-color-picker>
+          @change="themeChange"
+        >
+        </el-color-picker>
       </el-form-item>
       <el-form-item label="暗黑模式">
         <el-switch
@@ -56,7 +58,7 @@ let settingStore = useLayoutSettingStore();
 let userStore = useUserStore();
 let $router = useRouter();
 let $route = useRoute();
-const selectedColor = ref("rgba(255, 69, 0, 0.68)");
+const selectedColor = ref("#409eff");
 const predefineColors = ref([
   "#ff4500",
   "#ff8c00",
@@ -94,6 +96,12 @@ const changeDark = () => {
   value.value
     ? (document.documentElement.className = "dark")
     : (document.documentElement.className = "");
+};
+const themeChange = () => {
+  const el = document.documentElement;
+  // 设置 css 变量
+  el.style.setProperty("--el-color-primary", selectedColor.value);
+  el.style.setProperty("--el-color-primary", selectedColor.value);
 };
 </script>
 <script lang="ts">
