@@ -11,6 +11,7 @@ import "./styles/index.scss";
 import router from "./router";
 import store from "./store";
 import "./styles/nprogress.css";
+import "element-plus/theme-chalk/dark/css-vars.css";
 
 const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {

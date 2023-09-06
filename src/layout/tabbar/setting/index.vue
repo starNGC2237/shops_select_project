@@ -3,7 +3,31 @@
   </el-button>
   <el-button circle size="small" icon="FullScreen" @click="fullScreen">
   </el-button>
-  <el-button circle size="small" icon="Setting"> </el-button>
+  <el-popover title="主题设置" :width="200" trigger="hover">
+    <el-form>
+      <el-form-item label="主题颜色">
+        <el-color-picker
+          v-model="selectedColor"
+          show-alpha
+          :predefine="predefineColors"
+        ></el-color-picker>
+      </el-form-item>
+      <el-form-item label="暗黑模式">
+        <el-switch
+          v-model="value"
+          active-icon="MoonNight"
+          inactive-icon="Sunny"
+          inline-prompt
+          @change="changeDark"
+        >
+        </el-switch>
+      </el-form-item>
+    </el-form>
+    <template #reference>
+      <el-button circle size="small" icon="Setting"> </el-button>
+    </template>
+  </el-popover>
+
   <img
     :src="userStore.avatar"
     style="width: 20px; height: 20px; margin: 0 10px"
@@ -26,11 +50,30 @@
 <script setup lang="ts">
 import useLayoutSettingStore from "@/store/modules/setting";
 import useUserStore from "@/store/modules/user";
+import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 let settingStore = useLayoutSettingStore();
 let userStore = useUserStore();
 let $router = useRouter();
 let $route = useRoute();
+const selectedColor = ref("rgba(255, 69, 0, 0.68)");
+const predefineColors = ref([
+  "#ff4500",
+  "#ff8c00",
+  "#ffd700",
+  "#90ee90",
+  "#00ced1",
+  "#1e90ff",
+  "#c71585",
+  "rgba(255, 69, 0, 0.68)",
+  "rgb(255, 120, 0)",
+  "hsv(51, 100, 98)",
+  "hsva(120, 40, 94, 0.5)",
+  "hsl(181, 100%, 37%)",
+  "hsla(209, 100%, 56%, 0.73)",
+  "#c7158577",
+]);
+let value = ref<boolean>(false);
 
 const updateRefresh = () => {
   settingStore.refresh = !settingStore.refresh;
@@ -46,6 +89,11 @@ const fullScreen = () => {
 const logout = async () => {
   await userStore.userLogout();
   $router.push({ path: "/login", query: { redirect: $route.fullPath } });
+};
+const changeDark = () => {
+  value.value
+    ? (document.documentElement.className = "dark")
+    : (document.documentElement.className = "");
 };
 </script>
 <script lang="ts">
