@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            html,
+            body {
+                width: 100vw;
+                height: 100vh;
+            }
+            .container {
+                width: 100%;
+                height: 100%;
+                background: skyblue no-repeat;
+                background-size: cover;
+            }
+            .box {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                width: 1920px;
+                height: 1080px;
+                background-color: red;
+                transform-origin: left top;
+            }
+            .top {
+                width: 100px;
+                height: 100px;
+                background-color: hotpink;
+                margin-left: 50px;
+                
+            }
+            .bottom {
+                width: 100px;
+                height: 100px;
+                background-color: salmon;
+                margin-left: 50px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="box">
+                <div class="top">菜市场吃睡吃睡吃睡吃睡吃睡长春市</div>
+                <div class="bottom">擦撒大叔大叔大叔打的</div>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+    // 控制数据大屏放大与缩小
+    let box = document.querySelector(".box");
+    box.style.transform = `scale(${getScale()}) translate(-50%,-50%)`;
+
+
+    function getScale(w=1920,h=1080) {
+        console.log(window.innerWidth,window.innerHeight);
+        const ww = window.innerWidth/w;
+        const wh = window.innerHeight/h;
+        return Math.min(ww,wh);
+    }
+
+    window.onresize = function() {
+        box.style.transform = `scale(${getScale()}) translate(-50%,-50%)`;
+    }
+</script>
