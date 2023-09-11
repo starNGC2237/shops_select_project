@@ -5,7 +5,11 @@
         <Top />
       </div>
       <div class="bottom">
-        <div class="left">左</div>
+        <div class="left">
+          <Tourist class="tourist" />
+          <Sex class="sex" />
+          <Age class="age" />
+        </div>
         <div class="center">中</div>
         <div class="right">右</div>
       </div>
@@ -16,6 +20,9 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import Top from "./components/top/index.vue";
+import Age from "./components/age/index.vue";
+import Sex from "./components/sex/index.vue";
+import Tourist from "./components/tourist/index.vue";
 
 let screenRef = ref<HTMLElement>();
 
@@ -65,7 +72,19 @@ onBeforeUnmount(() => {
         flex: 1;
       }
       .left {
+        display: flex;
         flex: 1;
+        height: 1040px;
+        flex-direction: column;
+        .tourist {
+          flex: 1.2;
+        }
+        .sex {
+          flex: 1;
+        }
+        .age {
+          flex: 1;
+        }
       }
       .center {
         flex: 2;
