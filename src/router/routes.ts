@@ -132,6 +132,15 @@ export const constantRoutes = [
           icon: "Orange",
         },
       },
+      {
+        path: "/product/product",
+        name: "Product",
+        component: () => import("@/views/product/product/index.vue"),
+        meta: {
+          title: "商品管理",
+          icon: "Goods",
+        },
+      },
     ],
   },
   {

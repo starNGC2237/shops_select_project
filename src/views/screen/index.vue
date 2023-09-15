@@ -10,7 +10,10 @@
           <Sex class="sex" />
           <Age class="age" />
         </div>
-        <div class="center">中</div>
+        <div class="center">
+          <Map class="map" />
+          <Line class="line" />
+        </div>
         <div class="right">右</div>
       </div>
     </div>
@@ -23,6 +26,8 @@ import Top from "./components/top/index.vue";
 import Age from "./components/age/index.vue";
 import Sex from "./components/sex/index.vue";
 import Tourist from "./components/tourist/index.vue";
+import Map from "./components/map/index.vue";
+import Line from "./components/line/index.vue";
 
 let screenRef = ref<HTMLElement>();
 
@@ -88,6 +93,16 @@ onBeforeUnmount(() => {
       }
       .center {
         flex: 2;
+        display: flex;
+        flex-direction: column;
+        .map {
+          display: flex;
+          flex: 3;
+        }
+        .line {
+          display: flex;
+          flex: 1;
+        }
       }
     }
   }

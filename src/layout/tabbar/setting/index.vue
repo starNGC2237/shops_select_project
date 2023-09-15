@@ -58,7 +58,7 @@ let settingStore = useLayoutSettingStore();
 let userStore = useUserStore();
 let $router = useRouter();
 let $route = useRoute();
-const selectedColor = ref("#409eff");
+const selectedColor = ref("#4A5DFF");
 const predefineColors = ref([
   "#ff4500",
   "#ff8c00",
