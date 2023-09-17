@@ -83,9 +83,10 @@ const login = async () => {
 <template>
   <div class="login_container">
     <el-row>
-      <el-col :span="12" :xs="0" />
-      <el-col :span="12" :xs="24">
+      <el-col :span="16" :xs="0" />
+      <el-col :span="8" :xs="24">
         <el-form
+          style="width: 80%"
           ref="loginFormRef"
           class="login_form"
           :model="loginForm"
