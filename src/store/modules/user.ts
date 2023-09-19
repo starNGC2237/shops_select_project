@@ -7,13 +7,25 @@ import type {
   UserInfoResponseData,
 } from "@/api/user/type";
 import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from "@/utils/token";
-import { constantRoutes } from "@/router/routes";
+import { constantRoutes, asyncRoutes, anyRoutes } from "@/router/routes";
+import router from "@/router/index";
+
+const filterAsyncRoutes = (asyncRoutes: any, routes: any) => {
+  return asyncRoutes.filter((item: any) => {
+    if (routes.includes(item.name)) {
+      if (item.children && item.children.length > 0) {
+        item.children = filterAsyncRoutes(item.children, routes);
+      }
+      return true;
+    }
+  });
+};
 
 const useUserStore = defineStore("User", {
   state: (): UserState => {
     return {
       token: GET_TOKEN() || "",
-      menuRoutes: constantRoutes,
+      menuRoutes: [],
       username: "",
       avatar: "",
     };
@@ -35,6 +47,14 @@ const useUserStore = defineStore("User", {
       if (result.code === 200) {
         this.username = result.data.name;
         this.avatar = result.data.avatar;
+        const userAsyncRoutes = filterAsyncRoutes(
+          asyncRoutes,
+          result.data.routes
+        );
+        this.menuRoutes = [...constantRoutes, ...userAsyncRoutes, ...anyRoutes];
+        [...userAsyncRoutes, ...anyRoutes].forEach((item) => {
+          router.addRoute(item);
+        });
         return "ok";
       } else {
         return Promise.reject(new Error(result.message));

@@ -42,49 +42,18 @@ export const constantRoutes = [
       icon: "Platform",
     },
   },
+
   {
-    path: "/acl",
-    component: () => import("@/layout/index.vue"),
-    name: "Acl",
-    redirect: "/acl/user",
+    path: "/404",
+    component: () => import("@/views/404/index.vue"),
+    name: "404",
     meta: {
-      title: "权限管理",
-      hidden: false,
-      icon: "Lock",
+      title: "404",
+      hidden: true,
     },
-    children: [
-      {
-        name: "Acl",
-        path: "/acl/user",
-        component: () => import("@/views/acl/user/index.vue"),
-        meta: {
-          title: "用户管理",
-          hidden: false,
-          icon: "User",
-        },
-      },
-      {
-        name: "Role",
-        path: "/acl/role",
-        component: () => import("@/views/acl/role/index.vue"),
-        meta: {
-          title: "角色管理",
-          hidden: false,
-          icon: "MessageBox",
-        },
-      },
-      {
-        name: "Permission",
-        path: "/acl/permission",
-        component: () => import("@/views/acl/permission/index.vue"),
-        meta: {
-          title: "菜单管理",
-          hidden: false,
-          icon: "Monitor",
-        },
-      },
-    ],
   },
+];
+export const asyncRoutes = [
   {
     path: "/product",
     component: () => import("@/layout/index.vue"),
@@ -144,14 +113,51 @@ export const constantRoutes = [
     ],
   },
   {
-    path: "/404",
-    component: () => import("@/views/404/index.vue"),
-    name: "404",
+    path: "/acl",
+    component: () => import("@/layout/index.vue"),
+    name: "Acl",
+    redirect: "/acl/user",
     meta: {
-      title: "404",
-      hidden: true,
+      title: "权限管理",
+      hidden: false,
+      icon: "Lock",
     },
+    children: [
+      {
+        name: "Acl",
+        path: "/acl/user",
+        component: () => import("@/views/acl/user/index.vue"),
+        meta: {
+          title: "用户管理",
+          hidden: false,
+          icon: "User",
+        },
+      },
+      {
+        name: "Role",
+        path: "/acl/role",
+        component: () => import("@/views/acl/role/index.vue"),
+        meta: {
+          title: "角色管理",
+          hidden: false,
+          icon: "MessageBox",
+        },
+      },
+      {
+        name: "Permission",
+        path: "/acl/permission",
+        component: () => import("@/views/acl/permission/index.vue"),
+        meta: {
+          title: "菜单管理",
+          hidden: false,
+          icon: "Monitor",
+        },
+      },
+    ],
   },
+];
+
+export const anyRoutes = [
   {
     path: "/:pathMatch(.*)*",
     redirect: "/404",
