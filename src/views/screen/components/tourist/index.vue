@@ -48,10 +48,10 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .box {
-  background: url(../../images/dataScreen-main-lb.png) no-repeat;
+  background: url(../../images/dataScreen-main-lt.png) no-repeat;
   background-size: 100% 100%;
   .top {
-    margin-left: 20px;
+    margin-left: 0px;
     .title {
       color: #fff;
       font-size: 20px;

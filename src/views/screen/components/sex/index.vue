@@ -2,7 +2,7 @@
   <div class="box1">
     <div class="title">
       <p>男女比例</p>
-      <img src="../../images/dataScreen-title.png" alt="" />
+      <p class="bg"></p>
     </div>
     <div class="sex">
       <div class="man">
@@ -98,14 +98,21 @@ onMounted(() => {
 .box1 {
   width: 100%;
   height: 100%;
-  background: url("../../images/dataScreen-main-cb.png") no-repeat;
+  background: url("../../images/dataScreen-main-lc.png") no-repeat;
   background-size: 100% 100%;
   margin: 20px 0;
   .title {
-    margin-left: 20px;
+    margin-left: 0px;
     p {
       color: white;
       font-size: 20px;
+    }
+    .bg {
+      width: 68px;
+      height: 7px;
+      background: url(../../images/dataScreen-title.png) no-repeat;
+      background-size: 100% 100%;
+      margin-top: 10px;
     }
   }
   .sex {

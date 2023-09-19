@@ -17,6 +17,7 @@ onMounted(() => {
       map: "china",
       roam: true,
       top: 100,
+      zoom: 1.25,
       label: {
         show: true,
         color: "#fff",

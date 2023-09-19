@@ -16,11 +16,11 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { ref, onMounted, onBeforeUnmount } from "vue";
-import dayjs from "dayjs";
+import * as dayjs from "dayjs";
 
 let $router = useRouter();
 let time = ref(dayjs().format("YYYY-MM-DD HH:mm:ss"));
-let timer = ref(null);
+let timer = ref();
 
 const goHome = () => {
   $router.push("/home");

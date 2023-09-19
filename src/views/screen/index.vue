@@ -14,7 +14,11 @@
           <Map class="map" />
           <Line class="line" />
         </div>
-        <div class="right">右</div>
+        <div class="right">
+          <Rank class="rank" />
+          <Year class="year" />
+          <Couter class="couter" />
+        </div>
       </div>
     </div>
   </div>
@@ -28,6 +32,9 @@ import Sex from "./components/sex/index.vue";
 import Tourist from "./components/tourist/index.vue";
 import Map from "./components/map/index.vue";
 import Line from "./components/line/index.vue";
+import Rank from "./components/rank/index.vue";
+import Year from "./components/year/index.vue";
+import Couter from "./components/couter/index.vue";
 
 let screenRef = ref<HTMLElement>();
 
@@ -73,13 +80,26 @@ onBeforeUnmount(() => {
     }
     .bottom {
       display: flex;
+      box-sizing: border-box;
+      padding: 44px 0 10px 0;
+      height: 1040px;
       .right {
+        display: flex;
+        flex-direction: column;
         flex: 1;
+        .rank {
+          flex: 1.2;
+        }
+        .year {
+          flex: 1;
+        }
+        .couter {
+          flex: 1;
+        }
       }
       .left {
         display: flex;
         flex: 1;
-        height: 1040px;
         flex-direction: column;
         .tourist {
           flex: 1.2;
@@ -97,7 +117,8 @@ onBeforeUnmount(() => {
         flex-direction: column;
         .map {
           display: flex;
-          flex: 3;
+          flex: 2.2;
+          margin: 20px 0;
         }
         .line {
           display: flex;
