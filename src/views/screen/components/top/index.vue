@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { ref, onMounted, onBeforeUnmount } from "vue";
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 
 let $router = useRouter();
 let time = ref(dayjs().format("YYYY-MM-DD HH:mm:ss"));

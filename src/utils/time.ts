@@ -1,4 +1,4 @@
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 export const getMoment = () => {
   const h = dayjs().hour();
   if (h >= 0 && h <= 6) {
