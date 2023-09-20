@@ -9,6 +9,9 @@ import type {
 import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from "@/utils/token";
 import { constantRoutes, asyncRoutes, anyRoutes } from "@/router/routes";
 import router from "@/router/index";
+// eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error, @typescript-eslint/ban-ts-comment
+//@ts-ignore
+import cloneDeep from "lodash/cloneDeep";
 
 const filterAsyncRoutes = (asyncRoutes: any, routes: any) => {
   return asyncRoutes.filter((item: any) => {
@@ -28,6 +31,7 @@ const useUserStore = defineStore("User", {
       menuRoutes: [],
       username: "",
       avatar: "",
+      buttons: [],
     };
   },
   actions: {
@@ -47,8 +51,9 @@ const useUserStore = defineStore("User", {
       if (result.code === 200) {
         this.username = result.data.name;
         this.avatar = result.data.avatar;
+        this.buttons = result.data.buttons;
         const userAsyncRoutes = filterAsyncRoutes(
-          asyncRoutes,
+          cloneDeep(asyncRoutes),
           result.data.routes
         );
         this.menuRoutes = [...constantRoutes, ...userAsyncRoutes, ...anyRoutes];
@@ -67,6 +72,8 @@ const useUserStore = defineStore("User", {
         this.token = "";
         this.username = "";
         this.avatar = "";
+        this.menuRoutes = [];
+        this.buttons = [];
         REMOVE_TOKEN();
         return "ok";
       }

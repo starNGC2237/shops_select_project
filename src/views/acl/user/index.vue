@@ -12,7 +12,9 @@
       </el-form>
     </el-card>
     <el-card style="margin: 10px 0">
-      <el-button type="primary" @click="addUser">添加用户</el-button>
+      <el-button type="primary" @click="addUser" v-has="'btn.User.add'"
+        >添加用户</el-button
+      >
       <el-button
         type="primary"
         :disabled="selectArr.length <= 0"

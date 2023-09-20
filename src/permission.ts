@@ -22,7 +22,7 @@ router.beforeEach(async (to: any, _, next: any) => {
       if (!username) {
         try {
           await userStore.getUserInfo();
-          next();
+          next({ ...to });
         } catch (err) {
           console.log(err);
           await userStore.userLogout();

@@ -235,7 +235,7 @@ const setPermission = async (row: RoleData) => {
 const selectedArr = computed(() => {
   const filterSelectArr = (arr: any, initArr: any) => {
     arr.forEach((item: any) => {
-      if (item.select) {
+      if (item.select && item.level === 4) {
         initArr.push(item.id);
       }
       if (item.children && item.children.length > 0) {

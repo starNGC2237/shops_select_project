@@ -1,8 +1,13 @@
 <template>
   <el-card>
-    <el-button type="primary" icon="Plus" @click="addTrademark"
-      >添加品牌</el-button
+    <el-button
+      type="primary"
+      icon="Plus"
+      @click="addTrademark"
+      v-has="'btn.Trademark.add'"
     >
+      添加品牌
+    </el-button>
     <el-table style="margin: 10px 0" border :data="trademarkArr">
       <el-table-column label="序号" width="80px" align="center" type="index">
       </el-table-column>

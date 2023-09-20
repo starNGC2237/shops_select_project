@@ -12,6 +12,8 @@ import router from "./router";
 import store from "./store";
 import "./styles/nprogress.css";
 import "element-plus/theme-chalk/dark/css-vars.css";
+import "./permission";
+import { buttonPermission } from "@/directive/buttonPermission";
 
 const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
@@ -21,5 +23,5 @@ app.use(globalComponent);
 app.use(ElementPlus, { locale: zhCn });
 app.use(router);
 app.use(store);
-import "./permission";
+buttonPermission(app);
 app.mount("#app");

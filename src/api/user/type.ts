@@ -13,7 +13,7 @@ export interface LoginResponseData extends ResponseData {
 
 export interface UserInfoResponseData extends ResponseData {
   data: {
-    result: string[];
+    routes: string[];
     buttons: string[];
     roles: string[];
     name: string;
