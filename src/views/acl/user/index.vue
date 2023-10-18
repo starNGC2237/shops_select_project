@@ -413,4 +413,7 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
 }
+::v-deep .el-form-item {
+  margin-bottom: 0;
+}
 </style>

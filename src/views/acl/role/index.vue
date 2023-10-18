@@ -287,4 +287,7 @@ onMounted(() => {
   align-items: center;
   height: 50px;
 }
+::v-deep .el-form-item {
+  margin-bottom: 0;
+}
 </style>

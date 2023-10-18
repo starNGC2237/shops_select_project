@@ -1,10 +1,13 @@
 <template>
   <div class="goods__edit">
-    <el-page-header @back="goBack" class="page-header">
-      <template #content>
-        <span> 商品添加/编辑 </span>
-      </template>
-    </el-page-header>
+    <el-card :body-style="{ padding: 0 }" :shadow="'never'">
+      <el-page-header @back="goBack" class="page-header">
+        <template #content>
+          <span> 商品添加/编辑 </span>
+        </template>
+      </el-page-header>
+    </el-card>
+
     <div class="content">
       <el-card shadow="never" class="content__card" body-style="padding:0;">
         <el-tabs v-model="activeTab" class="demo-tabs" @tab-click="handleClick">
@@ -49,7 +52,6 @@ const goBack = () => {
 
 <style scoped lang="scss">
 .page-header {
-  background-color: white;
   padding: 20px;
 }
 .content {
