@@ -383,7 +383,7 @@ const removeSpecification = (specification: { id: any }) => {
     }
   }
 }
-::v-deep .el-upload {
+:deep(.el-upload) {
   width: 60px;
   height: 60px;
 }
