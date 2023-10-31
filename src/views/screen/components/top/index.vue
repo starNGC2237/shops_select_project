@@ -4,7 +4,7 @@
       <span class="lbtn" @click="goHome">首页</span>
     </div>
     <div class="center">
-      <div class="title">智慧旅游可视化大数据平台</div>
+      <div class="title">运营可视化大数据平台</div>
     </div>
     <div class="right">
       <span class="rbtn">统计报告</span>
@@ -43,7 +43,8 @@ onBeforeUnmount(() => {
   display: flex;
   .right {
     flex: 1.5;
-    background: url(../../images/dataScreen-header-left-bg.png) no-repeat;
+    background: url(../../../../assets/images/screen/dataScreen-header-left-bg.png)
+      no-repeat;
     background-size: cover;
     display: flex;
     justify-content: space-between;
@@ -53,12 +54,14 @@ onBeforeUnmount(() => {
       width: 150px;
       height: 40px;
       float: left;
-      background: url(../../images/dataScreen-header-btn-bg-r.png) no-repeat;
+      background: url(../../../../assets/images/screen/dataScreen-header-btn-bg-r.png)
+        no-repeat;
       background-size: 100% 100%;
       text-align: center;
       line-height: 40px;
       color: #29fcff;
       font-size: 20px;
+      cursor: pointer;
     }
     .time {
       color: #29fcff;
@@ -69,13 +72,15 @@ onBeforeUnmount(() => {
   }
   .left {
     flex: 1.5;
-    background: url(../../images/dataScreen-header-left-bg.png) no-repeat;
+    background: url(../../../../assets/images/screen/dataScreen-header-left-bg.png)
+      no-repeat;
     background-size: cover;
     .lbtn {
       width: 150px;
       height: 40px;
       float: right;
-      background: url(../../images/dataScreen-header-btn-bg-l.png) no-repeat;
+      background: url(../../../../assets/images/screen/dataScreen-header-btn-bg-l.png)
+        no-repeat;
       background-size: cover;
       text-align: center;
       line-height: 40px;
@@ -89,7 +94,8 @@ onBeforeUnmount(() => {
     .title {
       width: 100%;
       height: 74px;
-      background: url(../../images/dataScreen-header-center-bg.png) no-repeat;
+      background: url(../../../../assets/images/screen/dataScreen-header-center-bg.png)
+        no-repeat;
       background-size: 100% 100%;
       text-align: center;
       line-height: 74px;

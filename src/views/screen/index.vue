@@ -65,7 +65,7 @@ onBeforeUnmount(() => {
 .container {
   width: 100vw;
   height: 100vh;
-  background: url(./images/bg.png) no-repeat;
+  background: url(../../assets/images/screen/bg.png) no-repeat;
   background-size: cover;
   .screen {
     position: fixed;

@@ -70,10 +70,11 @@ onMounted(() => {
 .box2 {
   width: 100%;
   height: 100%;
-  background: url(../../images/dataScreen-main-lb.png) no-repeat;
+  background: url(../../../../assets/images/screen/dataScreen-main-lb.png)
+    no-repeat;
   background-size: 100% 100%;
   .title {
-    margin-left: 0px;
+    margin-left: 0;
     p {
       color: white;
       font-size: 20px;
@@ -81,7 +82,8 @@ onMounted(() => {
     .bg {
       width: 68px;
       height: 7px;
-      background: url(../../images/dataScreen-title.png) no-repeat;
+      background: url(../../../../assets/images/screen/dataScreen-title.png)
+        no-repeat;
       background-size: 100% 100%;
       margin-top: 10px;
     }

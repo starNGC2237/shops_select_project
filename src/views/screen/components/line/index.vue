@@ -50,14 +50,15 @@ onMounted(() => {
 .box5 {
   width: calc(100% - 20px);
   height: 100%;
-  background: url(../../images/dataScreen-main-cb.png) no-repeat;
+  background: url(../../../../assets/images/screen/dataScreen-main-cb.png)
+    no-repeat;
   background-size: 100% 100%;
   margin: 0 10px;
   display: flex;
   flex-direction: column;
 
   .title {
-    margin-left: 0px;
+    margin-left: 0;
     height: 70px;
     display: flex;
     flex-direction: column;
@@ -68,7 +69,8 @@ onMounted(() => {
     .bg {
       width: 68px;
       height: 7px;
-      background: url(../../images/dataScreen-title.png) no-repeat;
+      background: url(../../../../assets/images/screen/dataScreen-title.png)
+        no-repeat;
       background-size: 100% 100%;
       margin-top: 10px;
     }

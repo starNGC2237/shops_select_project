@@ -48,10 +48,11 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .box {
-  background: url(../../images/dataScreen-main-lt.png) no-repeat;
+  background: url(../../../../assets/images/screen/dataScreen-main-lt.png)
+    no-repeat;
   background-size: 100% 100%;
   .top {
-    margin-left: 0px;
+    margin-left: 0;
     .title {
       color: #fff;
       font-size: 20px;
@@ -59,7 +60,8 @@ onMounted(() => {
     .bg {
       width: 68px;
       height: 7px;
-      background: url(../../images/dataScreen-title.png) no-repeat;
+      background: url(../../../../assets/images/screen/dataScreen-title.png)
+        no-repeat;
       background-size: 100% 100%;
       margin-top: 10px;
     }
@@ -82,7 +84,7 @@ onMounted(() => {
       height: 40px;
       text-align: center;
       line-height: 40px;
-      background: url(../../images/total.png) no-repeat;
+      background: url(../../../../assets/images/screen/total.png) no-repeat;
       background-size: 100% 100%;
       color: #29fcff;
     }

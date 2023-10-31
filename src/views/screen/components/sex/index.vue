@@ -6,10 +6,10 @@
     </div>
     <div class="sex">
       <div class="man">
-        <img src="../../images/man.png" alt="" />
+        <img src="../../../../assets/images/screen/man.png" alt="" />
       </div>
       <div class="woman">
-        <img src="../../images/woman.png" alt="" />
+        <img src="../../../../assets/images/screen/woman.png" alt="" />
       </div>
     </div>
     <div class="rate">
@@ -98,11 +98,12 @@ onMounted(() => {
 .box1 {
   width: 100%;
   height: 100%;
-  background: url("../../images/dataScreen-main-lc.png") no-repeat;
+  background: url("../../../../assets/images/screen/dataScreen-main-lc.png")
+    no-repeat;
   background-size: 100% 100%;
   margin: 20px 0;
   .title {
-    margin-left: 0px;
+    margin-left: 0;
     p {
       color: white;
       font-size: 20px;
@@ -110,7 +111,8 @@ onMounted(() => {
     .bg {
       width: 68px;
       height: 7px;
-      background: url(../../images/dataScreen-title.png) no-repeat;
+      background: url(../../../../assets/images/screen/dataScreen-title.png)
+        no-repeat;
       background-size: 100% 100%;
       margin-top: 10px;
     }
@@ -122,7 +124,7 @@ onMounted(() => {
       margin: 20px;
       width: 111px;
       height: 115px;
-      background: url(../../images/man-bg.png) no-repeat;
+      background: url(../../../../assets/images/screen/man-bg.png) no-repeat;
       background-size: 100% 100%;
       display: flex;
       justify-content: center;
@@ -132,7 +134,7 @@ onMounted(() => {
       margin: 20px;
       width: 111px;
       height: 115px;
-      background: url(../../images/woman-bg.png) no-repeat;
+      background: url(../../../../assets/images/screen/woman-bg.png) no-repeat;
       background-size: 100% 100%;
       display: flex;
       justify-content: center;
