@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card>
+    <el-card body-style="padding:30px">
       <div class="box">
         <el-image :src="userStore.avatar" alt="head pic" class="avatar" />
         <div class="bottom">
