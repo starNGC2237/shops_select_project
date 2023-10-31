@@ -1,9 +1,6 @@
 <template>
   <div class="layout-container">
-    <div
-      class="layout_slider"
-      :class="{ fold: !!useLayoutSetting.fold }"
-    >
+    <div class="layout_slider" :class="{ fold: !!useLayoutSetting.fold }">
       <Logo />
       <el-scrollbar class="scrollbar">
         <el-menu
