@@ -67,6 +67,9 @@ onMounted(() => {
     }
     .right {
       float: right;
+      position: relative;
+      top: -15px;
+      right: 10px;
       color: #fff;
       font-size: 20px;
       span {

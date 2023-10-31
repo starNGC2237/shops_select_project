@@ -103,6 +103,7 @@ onMounted(() => {
   background-size: 100% 100%;
   margin: 20px 0;
   .title {
+    height: 50px;
     margin-left: 0;
     p {
       color: white;
