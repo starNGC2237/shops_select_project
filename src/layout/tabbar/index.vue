@@ -33,6 +33,7 @@ export default {
   .tabbar_right {
     display: flex;
     align-items: center;
+    margin-right: 20px;
   }
 }
 </style>

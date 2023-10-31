@@ -59,7 +59,7 @@ export default {
   }
   p {
     font-size: $base-logo-title-font-size;
-    margin-left: 10px;
+    margin-left: 12px;
   }
 }
 </style>

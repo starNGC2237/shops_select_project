@@ -2,7 +2,7 @@
   <div class="layout-container">
     <div
       class="layout_slider"
-      :class="{ fold: useLayoutSetting.fold ? true : false }"
+      :class="{ fold: !!useLayoutSetting.fold }"
     >
       <Logo />
       <el-scrollbar class="scrollbar">
@@ -18,16 +18,10 @@
         </el-menu>
       </el-scrollbar>
     </div>
-    <div
-      class="layout_tabbar"
-      :class="{ fold: useLayoutSetting.fold ? true : false }"
-    >
+    <div class="layout_tabbar" :class="{ fold: !!useLayoutSetting.fold }">
       <Tabbar />
     </div>
-    <div
-      class="layout_main"
-      :class="{ fold: useLayoutSetting.fold ? true : false }"
-    >
+    <div class="layout_main" :class="{ fold: !!useLayoutSetting.fold }">
       <Main />
     </div>
   </div>

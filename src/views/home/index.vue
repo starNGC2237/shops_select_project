@@ -4,8 +4,10 @@
       <div class="box">
         <el-image :src="userStore.avatar" alt="head pic" class="avatar" />
         <div class="bottom">
-          <h3 class="title">{{ getMoment() }}，{{ userStore.username }}</h3>
-          <p class="sub">博客运营平台</p>
+          <h4 class="title">
+            {{ getMoment() }}，{{ userStore.username }}，开始您一天的工作吧！
+          </h4>
+          <p class="sub">运营平台</p>
         </div>
       </div>
     </el-card>
@@ -32,14 +34,17 @@ let userStore = useUserStore();
 }
 .title {
   font-size: 30px;
-  font-weight: 900;
-  margin-bottom: 30px;
+  font-weight: 500;
+  margin-bottom: 0.5em;
+  line-height: 1.75rem;
 }
 .bottom {
   margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .sub {
-  font-style: italic;
   color: skyblue;
 }
 .bot {
