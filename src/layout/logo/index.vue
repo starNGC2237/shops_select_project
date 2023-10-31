@@ -1,7 +1,7 @@
 <template>
-  <div class="logo" :class="{ fold: useLayoutSetting.fold ? true : false }">
+  <div class="logo" :class="{ fold: !!useLayoutSetting.fold }">
     <img :src="setting.logo" :alt="setting.title" v-if="!setting.logoHidden" />
-    <p v-show="!useLayoutSetting.fold">
+    <p v-show="showTitle" :key="refresh.toString()">
       {{ setting.title }}
     </p>
   </div>
@@ -10,7 +10,28 @@
 <script setup lang="ts">
 import setting from "@/setting.ts";
 import useLayoutSettingStore from "@/store/modules/setting";
+import { ref, watch } from "vue";
+
 let useLayoutSetting = useLayoutSettingStore();
+let showTitle = !useLayoutSetting.fold;
+let timer = ref();
+let refresh = ref(false);
+
+watch(
+  () => useLayoutSetting.fold,
+  () => {
+    clearTimeout(timer.value);
+    if (useLayoutSetting.fold) {
+      showTitle = !useLayoutSetting.fold;
+      refresh.value = !refresh.value;
+    } else {
+      timer.value = setTimeout(() => {
+        showTitle = !useLayoutSetting.fold;
+        refresh.value = !refresh.value;
+      }, 300);
+    }
+  }
+);
 </script>
 <script lang="ts">
 export default {
@@ -24,7 +45,7 @@ export default {
   color: #fff;
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding: 0 20px;
   transition: all 0.3s;
   &.fold {
     justify-content: center;
