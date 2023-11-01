@@ -21,7 +21,7 @@ function init() {
   let ele = document.querySelector(".login_container_left");
   let w = ele ? ele.getBoundingClientRect().width : 0;
   let h = ele ? ele.getBoundingClientRect().height : 0;
-  camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 100);
+  camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
   camera.position.set(1.5, 4, 9);
 
   scene = new THREE.Scene();

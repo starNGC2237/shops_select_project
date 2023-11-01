@@ -43,7 +43,7 @@
             <template #header>
               <div class="card-header">
                 <h2>项目</h2>
-                <el-button type="primary" text>更多</el-button>
+                <el-link type="primary" :underline="false">更多</el-link>
               </div>
             </template>
           </el-card>
@@ -55,13 +55,19 @@
             <template #header>
               <div class="card-header">
                 <h2>最新动态</h2>
-                <el-button type="primary" text>更多</el-button>
+                <el-link type="primary" :underline="false">更多</el-link>
               </div>
             </template>
           </el-card>
         </div>
         <div class="right">
-          <el-card body-style="padding:30px" shadow="never"></el-card>
+          <el-card body-style="padding:30px" shadow="never">
+            <template #header>
+              <div class="card-header">
+                <h2>快捷导航</h2>
+              </div>
+            </template>
+          </el-card>
         </div>
       </div>
     </div>
@@ -73,7 +79,6 @@ import useUserStore from "@/store/modules/user";
 import { getMoment } from "@/utils/time";
 
 let userStore = useUserStore();
-
 </script>
 
 <style scoped lang="scss">
@@ -132,6 +137,7 @@ let userStore = useUserStore();
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 30px;
   & > h2 {
     margin: 0;
   }
