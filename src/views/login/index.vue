@@ -1,10 +1,87 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from "vue-router";
 import { Lock, User } from "@element-plus/icons-vue";
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import useUserStore from "@/store/modules/user";
 import { ElMessage, ElNotification } from "element-plus";
 import { getMoment } from "@/utils/time";
+import * as THREE from "three";
+
+import { OrbitControls } from "@/assets/three/addons/controls/OrbitControls.js";
+import { GLTFLoader } from "@/assets/three/addons/loaders/GLTFLoader.js";
+import { DRACOLoader } from "@/assets/three/addons/loaders/DRACOLoader.js";
+
+let camera: any, scene: any, renderer: any;
+onMounted(() => {
+  init();
+  render();
+});
+
+function init() {
+  let ele = document.querySelector(".login_container_left");
+  let w = ele ? ele.getBoundingClientRect().width : 0;
+  let h = ele ? ele.getBoundingClientRect().height : 0;
+  camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 100);
+  camera.position.set(1.5, 4, 9);
+
+  scene = new THREE.Scene();
+  scene.background = null;
+
+  //
+
+  const dracoLoader = new DRACOLoader();
+  dracoLoader.setDecoderPath("jsm/libs/draco/gltf/");
+  const loader = new GLTFLoader();
+  loader.setDRACOLoader(dracoLoader);
+  loader.setPath("/models/gltf/AVIFTest/");
+  loader.load("forest_house.glb", function (gltf: any) {
+    scene.add(gltf.scene);
+
+    render();
+  });
+
+  //
+
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setClearColor(0xffffff, 0);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(w, h);
+  document
+    .querySelector(".login_container_left")
+    ?.appendChild(renderer.domElement);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  // 禁止平移
+  controls.enablePan = false;
+  controls.addEventListener("change", render);
+  controls.target.set(0, 2, 0);
+  controls.update();
+
+  window.addEventListener("resize", onWindowResize);
+}
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+
+  let w = document.querySelector(".login_container_left")
+    ? document.querySelector(".login_container_left")?.getBoundingClientRect()
+        .width
+    : 0;
+  let h = document.querySelector(".login_container_left")
+    ? document.querySelector(".login_container_left")?.getBoundingClientRect()
+        .height
+    : 0;
+  renderer.setSize(w, h);
+
+  render();
+}
+
+//
+
+function render() {
+  renderer.render(scene, camera);
+}
 
 let userStore = useUserStore();
 let $router = useRouter();
@@ -83,8 +160,10 @@ const login = async () => {
 <template>
   <div class="login_container">
     <el-row>
-      <el-col :span="16" :xs="0" />
-      <el-col :span="8" :xs="24">
+      <el-col :span="16" :xs="0">
+        <div class="login_container_left"></div>
+      </el-col>
+      <el-col :span="8" :xs="24" style="display: flex; justify-content: center">
         <el-form
           style="width: 80%"
           ref="loginFormRef"
@@ -133,12 +212,22 @@ const login = async () => {
   background: url(@/assets/images/background.jpg) no-repeat;
   background-size: cover;
 }
+.login_container_left {
+  position: relative;
+  top: 20vh;
+  left: 60px;
+  width: calc(100% - 60px);
+  height: 70vh;
+  background-color: transparent;
+}
 .login_form {
   position: relative;
   width: 80%;
+  height: fit-content;
   top: 30vh;
   background: url(@/assets/images/login_form.png) no-repeat;
   background-size: cover;
+  backdrop-filter: blur(5px);
   padding: 40px;
   h1 {
     color: white;

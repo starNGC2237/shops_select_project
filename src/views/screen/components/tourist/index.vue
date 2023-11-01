@@ -10,7 +10,7 @@
         {{ item }}
       </span>
     </div>
-    <div class="charts" ref="charts">123</div>
+    <div class="charts" ref="charts"></div>
   </div>
 </template>
 
@@ -27,7 +27,7 @@ onMounted(() => {
     series: [
       {
         type: "liquidFill",
-        data: [0.6, 0.4, 0.2],
+        data: [0.6, 0.3],
         animationDuration: 3,
         animationDurationUpdate: 3,
         radius: "80%",

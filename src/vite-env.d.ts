@@ -6,3 +6,7 @@ declare module "*.vue" {
 }
 declare module "element-plus/dist/locale/zh-cn.mjs";
 declare module "nprogress";
+declare module "three";
+declare module "@/assets/three/addons/controls/OrbitControls.js";
+declare module "@/assets/three/addons/loaders/GLTFLoader.js";
+declare module "@/assets/three/addons/loaders/DRACOLoader.js";
