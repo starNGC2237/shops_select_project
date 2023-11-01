@@ -84,6 +84,9 @@ export default {
     overflow: auto;
     transition: all 0.3s;
     background-color: rgb(246, 246, 246);
+    html.dark & {
+      background-color: #424243;
+    }
     &.fold {
       width: calc(100% - $base-menu-min-width);
       left: $base-menu-min-width;
