@@ -159,7 +159,7 @@ const login = async () => {
 
 <template>
   <div class="login_container">
-    <el-row>
+    <el-row style="height: 100%">
       <el-col :span="16" :xs="0">
         <div class="login_container_left"></div>
       </el-col>
@@ -184,10 +184,11 @@ const login = async () => {
             <el-input
               :show-password="true"
               v-model="loginForm.password"
-              type="password"
+              :type="'password'"
               placeholder="请输入密码"
               :prefix-icon="Lock"
-            ></el-input>
+            >
+            </el-input>
           </el-form-item>
           <el-form-item>
             <el-button

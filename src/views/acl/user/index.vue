@@ -123,7 +123,12 @@
         <h4>{{ userParams.id ? "更新" : "添加" }}用户</h4>
       </template>
       <template #default>
-        <el-form :model="userParams" :rules="rules" ref="formRef">
+        <el-form
+          :model="userParams"
+          :rules="rules"
+          ref="formRef"
+          style="display: flex; flex-direction: column; row-gap: 1rem"
+        >
           <el-form-item label="用户姓名" prop="username">
             <el-input
               placeholder="请输入用户姓名"
@@ -138,7 +143,7 @@
           <el-form-item label="用户密码" prop="password" v-if="!userParams.id">
             <el-input
               placeholder="请输入用户密码"
-              type="password"
+              :type="'password'"
               v-model="userParams.password"
             >
             </el-input>
