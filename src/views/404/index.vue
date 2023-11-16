@@ -4,7 +4,7 @@
   <div class="box">
     <el-result title="404" subTitle="抱歉，请求错误">
       <template v-slot:icon>
-        <img src="../../assets/images/error_images/hamburger.png" />
+        <img src="../../assets/images/error_images/404.png" alt="" />
       </template>
       <template v-slot:extra>
         <el-button type="primary" @click="() => $router.push('/home')"
