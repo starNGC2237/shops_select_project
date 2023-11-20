@@ -33,6 +33,7 @@
   <img
     :src="userStore.avatar"
     style="width: 20px; height: 20px; margin: 0 10px"
+    alt="avatar"
   />
   <el-dropdown>
     <span class="el-dropdown-link">
@@ -52,7 +53,7 @@
 <script setup lang="ts">
 import useLayoutSettingStore from "@/store/modules/setting";
 import useUserStore from "@/store/modules/user";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 let settingStore = useLayoutSettingStore();
 let userStore = useUserStore();
@@ -77,6 +78,10 @@ const predefineColors = ref([
 ]);
 let value = ref<boolean>(false);
 
+onMounted(() => {
+  value.value = localStorage.getItem("dark") === "dark";
+  changeDark();
+});
 const updateRefresh = () => {
   settingStore.refresh = !settingStore.refresh;
 };
@@ -96,6 +101,7 @@ const changeDark = () => {
   value.value
     ? (document.documentElement.className = "dark")
     : (document.documentElement.className = "");
+  localStorage.setItem("dark", value.value ? "dark" : "");
 };
 const themeChange = () => {
   const el = document.documentElement;

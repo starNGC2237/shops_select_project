@@ -159,13 +159,19 @@ const login = async () => {
 
 <template>
   <div class="login_container">
-    <el-row style="height: 100%">
-      <el-col :span="16" :xs="0">
+    <el-row
+      style="
+        height: calc(100% - 4rem);
+        width: calc(100% - 4rem);
+        background-color: #fffc;
+        border-radius: 10px;
+      "
+    >
+      <el-col :span="15" :xs="0">
         <div class="login_container_left"></div>
       </el-col>
-      <el-col :span="8" :xs="24" style="display: flex; justify-content: center">
+      <el-col :span="9" :xs="24" class="login_col">
         <el-form
-          style="width: 80%"
           ref="loginFormRef"
           class="login_form"
           :model="loginForm"
@@ -175,6 +181,7 @@ const login = async () => {
           <h2>欢迎来到运营平台</h2>
           <el-form-item prop="username">
             <el-input
+              style="height: 2.4rem"
               v-model="loginForm.username"
               placeholder="请输入用户名"
               :prefix-icon="User"
@@ -182,6 +189,7 @@ const login = async () => {
           </el-form-item>
           <el-form-item prop="password">
             <el-input
+              style="height: 2.4rem"
               :show-password="true"
               v-model="loginForm.password"
               :type="'password'"
@@ -212,35 +220,55 @@ const login = async () => {
   height: 100vh;
   background: url(@/assets/images/background.jpg) no-repeat;
   background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .login_container_left {
   position: relative;
-  top: 20vh;
-  left: 60px;
+  top: 15vh;
+  left: 50px;
   width: calc(100% - 60px);
   height: 70vh;
   background-color: transparent;
+}
+.login_col {
+  display: flex;
+  justify-content: flex-start;
 }
 .login_form {
   position: relative;
   width: 80%;
   height: fit-content;
   top: 30vh;
-  background: url(@/assets/images/login_form.png) no-repeat;
+  background: var(--el-bg-color);
   background-size: cover;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(10px);
   padding: 40px;
+  border-radius: 10px;
+  margin-left: 2rem;
+  box-sizing: border-box;
+  max-width: 510px;
   h1 {
-    color: white;
     font-size: 40px;
   }
   h2 {
     font-size: 20px;
-    color: white;
     margin: 20px 0;
   }
   .login_btn {
     width: 100%;
+  }
+  &:hover {
+    box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.1);
+  }
+}
+@media only screen and (max-width: 768px) {
+  .login_col {
+    justify-content: center;
+  }
+  .login_form {
+    margin-left: 0;
   }
 }
 </style>
