@@ -12,11 +12,21 @@ import { GLTFLoader } from "@/assets/three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "@/assets/three/addons/loaders/DRACOLoader.js";
 
 let camera: any, scene: any, renderer: any;
+let darkValue = ref(false);
+
 onMounted(() => {
   init();
   render();
+  darkValue.value = localStorage.getItem("dark") === "dark";
+  changeDark();
 });
 
+const changeDark = () => {
+  darkValue.value
+    ? (document.documentElement.className = "dark")
+    : (document.documentElement.className = "");
+  localStorage.setItem("dark", darkValue.value ? "dark" : "");
+};
 function init() {
   let ele = document.querySelector(".login_container_left");
   let w = ele ? ele.getBoundingClientRect().width : 0;
@@ -36,7 +46,6 @@ function init() {
   loader.setPath("/models/gltf/AVIFTest/");
   loader.load("forest_house.glb", function (gltf: any) {
     scene.add(gltf.scene);
-
     render();
   });
 
@@ -143,7 +152,7 @@ const login = async () => {
   try {
     await userStore.userLogin(loginForm);
     let redirect: any = $route.query.redirect;
-    $router.push({ path: redirect || "/" });
+    await $router.push({ path: redirect || "/" });
     ElNotification({
       message: "登录成功",
       type: "success",
@@ -159,14 +168,7 @@ const login = async () => {
 
 <template>
   <div class="login_container">
-    <el-row
-      style="
-        height: calc(100% - 4rem);
-        width: calc(100% - 4rem);
-        background-color: #fffc;
-        border-radius: 10px;
-      "
-    >
+    <el-row class="login_row">
       <el-col :span="15" :xs="0">
         <div class="login_container_left"></div>
       </el-col>
@@ -210,6 +212,15 @@ const login = async () => {
           </el-form-item>
         </el-form>
       </el-col>
+      <el-switch
+        v-model="darkValue"
+        active-icon="MoonNight"
+        inactive-icon="Sunny"
+        inline-prompt
+        class="switch_dark"
+        @change="changeDark"
+      >
+      </el-switch>
     </el-row>
   </div>
 </template>
@@ -226,10 +237,10 @@ const login = async () => {
 }
 .login_container_left {
   position: relative;
-  top: 15vh;
+  top: 6vh;
   left: 50px;
-  width: calc(100% - 60px);
-  height: 70vh;
+  width: calc(100% - 50px);
+  height: 80vh;
   background-color: transparent;
 }
 .login_col {
@@ -270,5 +281,27 @@ const login = async () => {
   .login_form {
     margin-left: 0;
   }
+}
+.login_row {
+  height: calc(100% - 8vh);
+  width: calc(100% - 8vh);
+  background-color: #fffc;
+  border-radius: 10px;
+}
+html.dark {
+  .login_row {
+    background-color: #000c !important;
+  }
+  .login_form {
+    &:hover {
+      box-shadow: #ffffff1f 0 2px 10px 2px !important;
+    }
+  }
+}
+.switch_dark {
+  position: absolute;
+  top: 10px;
+  right: 17px;
+  z-index: 999;
 }
 </style>

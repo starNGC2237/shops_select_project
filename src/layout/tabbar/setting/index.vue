@@ -95,7 +95,7 @@ const fullScreen = () => {
 };
 const logout = async () => {
   await userStore.userLogout();
-  $router.push({ path: "/login", query: { redirect: $route.fullPath } });
+  await $router.push({ path: "/login", query: { redirect: $route.fullPath } });
 };
 const changeDark = () => {
   value.value
