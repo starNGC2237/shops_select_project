@@ -15,19 +15,25 @@ let camera: any, scene: any, renderer: any;
 let darkValue = ref(false);
 
 onMounted(() => {
+  // three.js 初始化
   init();
+  // three.js 渲染
   render();
+  // 切换暗黑模式
   darkValue.value = localStorage.getItem("dark") === "dark";
   changeDark();
 });
 
+// 切换暗黑模式
 const changeDark = () => {
   darkValue.value
     ? (document.documentElement.className = "dark")
     : (document.documentElement.className = "");
   localStorage.setItem("dark", darkValue.value ? "dark" : "");
 };
-function init() {
+
+// three.js 初始化
+const init = () => {
   let ele = document.querySelector(".login_container_left");
   let w = ele ? ele.getBoundingClientRect().width : 0;
   let h = ele ? ele.getBoundingClientRect().height : 0;
@@ -37,19 +43,15 @@ function init() {
   scene = new THREE.Scene();
   scene.background = null;
 
-  //
-
   const dracoLoader = new DRACOLoader();
   dracoLoader.setDecoderPath("jsm/libs/draco/gltf/");
   const loader = new GLTFLoader();
   loader.setDRACOLoader(dracoLoader);
-  loader.setPath("/models/gltf/AVIFTest/");
+  loader.setPath("/models/gltf/");
   loader.load("forest_house.glb", function (gltf: any) {
     scene.add(gltf.scene);
     render();
   });
-
-  //
 
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setClearColor(0xffffff, 0);
@@ -67,9 +69,10 @@ function init() {
   controls.update();
 
   window.addEventListener("resize", onWindowResize);
-}
+};
 
-function onWindowResize() {
+// three.js 窗口大小变化
+const onWindowResize = () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 
@@ -84,13 +87,12 @@ function onWindowResize() {
   renderer.setSize(w, h);
 
   render();
-}
+};
 
-//
-
-function render() {
+// three.js 渲染
+const render = () => {
   renderer.render(scene, camera);
-}
+};
 
 let userStore = useUserStore();
 let $router = useRouter();
@@ -257,6 +259,7 @@ const login = async () => {
   backdrop-filter: blur(10px);
   padding: 40px;
   border-radius: 10px;
+  border: 1px solid var(--el-border-color);
   margin-left: 2rem;
   box-sizing: border-box;
   max-width: 510px;
