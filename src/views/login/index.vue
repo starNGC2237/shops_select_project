@@ -229,7 +229,7 @@ const login = async () => {
 .login_container {
   width: 100%;
   height: 100vh;
-  background: url(@/assets/images/background.jpg) no-repeat;
+  background: url(@/assets/images/login_bg.svg) no-repeat;
   background-size: cover;
   display: flex;
   justify-content: center;
