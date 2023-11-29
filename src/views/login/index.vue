@@ -13,6 +13,7 @@ import { DRACOLoader } from "@/assets/three/addons/loaders/DRACOLoader.js";
 
 let camera: any, scene: any, renderer: any;
 let darkValue = ref(false);
+let per = ref(0);
 
 onMounted(() => {
   // three.js 初始化
@@ -48,10 +49,19 @@ const init = () => {
   const loader = new GLTFLoader();
   loader.setDRACOLoader(dracoLoader);
   loader.setPath("/models/gltf/");
-  loader.load("forest_house.glb", function (gltf: any) {
-    scene.add(gltf.scene);
-    render();
-  });
+  loader.load(
+    "forest_house.glb",
+    function (gltf: any) {
+      (document.getElementById("per") as HTMLElement).style.display = "none";
+      scene.add(gltf.scene);
+      render();
+    },
+    function (xhr: any) {
+      const percent = xhr.loaded / xhr.total;
+      // console.log('加载进度' + percent);
+      per.value = Number((percent * 100).toFixed(2));
+    }
+  );
 
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setClearColor(0xffffff, 0);
@@ -172,7 +182,12 @@ const login = async () => {
   <div class="login_container">
     <el-row class="login_row">
       <el-col :span="15" :xs="0">
-        <div class="login_container_left"></div>
+        <div class="login_container_left">
+          <!-- 进度条 -->
+          <div class="per" id="per">
+            <el-progress :percentage="per" />
+          </div>
+        </div>
       </el-col>
       <el-col :span="9" :xs="24" class="login_col">
         <el-form
@@ -306,5 +321,12 @@ html.dark {
   top: 10px;
   right: 17px;
   z-index: 999;
+}
+#per {
+  position: relative;
+  width: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(calc(-50% - 5px), -50%);
 }
 </style>
