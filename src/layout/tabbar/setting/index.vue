@@ -1,8 +1,7 @@
 <template>
   <el-button circle size="small" icon="Refresh" @click="updateRefresh">
   </el-button>
-  <el-button circle size="small" icon="FullScreen" @click="fullScreen">
-  </el-button>
+  <el-button circle size="small" icon="FullScreen" @click="toggle"></el-button>
   <el-popover title="主题设置" :width="200" trigger="hover">
     <el-form>
       <el-form-item label="主题颜色">
@@ -55,6 +54,8 @@ import useLayoutSettingStore from "@/store/modules/setting";
 import useUserStore from "@/store/modules/user";
 import { onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { useFullscreen } from "@vueuse/core";
+let { toggle } = useFullscreen();
 let settingStore = useLayoutSettingStore();
 let userStore = useUserStore();
 let $router = useRouter();
@@ -84,14 +85,6 @@ onMounted(() => {
 });
 const updateRefresh = () => {
   settingStore.refresh = !settingStore.refresh;
-};
-const fullScreen = () => {
-  let full = document.fullscreenElement;
-  if (!full) {
-    document.documentElement.requestFullscreen();
-  } else {
-    document.exitFullscreen();
-  }
 };
 const logout = async () => {
   await userStore.userLogout();
